@@ -1,0 +1,6 @@
+{"file":"enemyplane.png","frames":{
+"enemyplane3":{"x":434,"y":1,"w":73,"h":56,"offX":3,"offY":12,"sourceW":79,"sourceH":79},
+"enemyplane2":{"x":280,"y":1,"w":81,"h":58,"offX":0,"offY":12,"sourceW":81,"sourceH":81},
+"enemyplane4":{"x":363,"y":1,"w":69,"h":63,"offX":10,"offY":16,"sourceW":90,"sourceH":90},
+"enemyplane1":{"x":197,"y":1,"w":81,"h":58,"offX":0,"offY":12,"sourceW":81,"sourceH":81},
+"BOSS":{"x":1,"y":1,"w":194,"h":207,"offX":6,"offY":0,"sourceW":207,"sourceH":207}}}
