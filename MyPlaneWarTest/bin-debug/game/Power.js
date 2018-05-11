@@ -1,6 +1,7 @@
 /**
  * Buff能量类
  * {1:子弹类型1, 2:子弹类型2, 3:子弹类型3, 4:护卫机Buff, 5:飞机生命}
+ * test git
  */
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
