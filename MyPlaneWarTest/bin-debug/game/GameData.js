@@ -12,6 +12,7 @@ var GameData = (function () {
     GameData.bulletCacheDict = {}; // 后台子弹缓存
     GameData.aeroliteCacheList = []; // 陨石缓存
     GameData.powerCacheDict = {}; // 后台Power缓存
+    GameData.BombCacheList = []; // 爆炸特效对象缓存列表
     GameData.myPlane = null; // 我的飞机对象
     GameData.guardPlaneLeft = null; // 左护卫机
     GameData.guardPlaneRight = null; // 右护卫机

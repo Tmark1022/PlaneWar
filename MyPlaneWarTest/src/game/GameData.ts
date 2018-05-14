@@ -7,12 +7,14 @@ class GameData{
     static targetFps:number;                            // 标准帧率
     static fpsOffset:number;                            // 相对于标准帧率的偏移值
     static fpsLastRecordTime:number;                    // 上一次记录帧率的时间(毫秒值)
+    static GameAppObj:GameApp;                          // GameApp类对象
 
 
     static planeCacheDict:Object = {};                  // 后台飞机缓存
     static bulletCacheDict:Object = {};                 // 后台子弹缓存
-    static aeroliteCacheList:Aerolite[] = []            // 陨石缓存
-    static powerCacheDict:Object = {}                   // 后台Power缓存
+    static aeroliteCacheList:Aerolite[] = [];           // 陨石缓存
+    static powerCacheDict:Object = {};                  // 后台Power缓存
+    static BombCacheList:Bomb[] = [];                   // 爆炸特效对象缓存列表
 
     static myPlane:MyPlane = null;                      // 我的飞机对象
     static guardPlaneLeft:GuardPlane = null;            // 左护卫机

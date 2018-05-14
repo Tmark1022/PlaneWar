@@ -26,7 +26,7 @@ var GameApp = (function (_super) {
         _this.enemy_plane_timer1 = new egret.Timer(1000); // 创建敌方飞机计时器1
         _this.enemy_plane_timer2 = new egret.Timer(5000); // 创建敌方飞机计时器2
         _this.enemy_plane_timer3 = new egret.Timer(20000); // 创建敌方飞机计时器3
-        _this.boss_plane_timer = new egret.Timer(5000); // Boss计时器
+        _this.boss_plane_timer = new egret.Timer(20000); // Boss计时器
         _this.aerolite_timer = new egret.Timer(2000); // 陨石计时器
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
@@ -199,10 +199,13 @@ var GameApp = (function (_super) {
         this.addChild(aerolite_obj);
         GameData.aeroliteOnStage.push(aerolite_obj);
         // test
-        this.createPower(GameData.stageW / 2, 20);
+        this.createPower(aerolite_obj);
+        this.createBomb(GameData.myPlane);
     };
     /**创建power */
-    GameApp.prototype.createPower = function (temp_x, temp_y) {
+    GameApp.prototype.createPower = function (display_obj) {
+        var temp_x = display_obj.x;
+        var temp_y = display_obj.y;
         var power_type = Math.floor(Math.random() * 5) + 1;
         // 创建power
         var power_obj = Power.createPower(power_type);
@@ -215,6 +218,17 @@ var GameApp = (function (_super) {
         power_obj.y = temp_y;
         this.addChild(power_obj);
         GameData.powerOnStage.push(power_obj);
+    };
+    /**创建爆炸特效 */
+    GameApp.prototype.createBomb = function (display_obj) {
+        if (display_obj == null)
+            return;
+        var x_temp = display_obj.x;
+        var y_temp = display_obj.y;
+        var bomb_obj = Bomb.createBomb();
+        bomb_obj.x = x_temp;
+        bomb_obj.y = y_temp;
+        this.addChild(bomb_obj);
     };
     // 创建子弹响应函数
     GameApp.prototype.createBullet = function (evt) {
@@ -306,6 +320,7 @@ var GameApp = (function (_super) {
             // 创建三发平行子弹
             for (var index = 0; index < 3; ++index) {
                 var bullet_obj = Bullet.createBullet(plane_obj.bullet_type);
+                bullet_obj.rotation = 0; // 用了Boss的子弹缓存， 设置下旋转度
                 bullet_obj.x = plane_obj.x + (1 - index) * 55;
                 bullet_obj.y = plane_obj.y + plane_obj.width / 3;
                 bullet_obj.setHorizontalSpeed(0);

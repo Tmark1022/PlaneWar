@@ -128,6 +128,7 @@ var Main = (function (_super) {
     Main.prototype.createGameScene = function () {
         var game_app = new GameApp();
         this.addChild(game_app);
+        GameData.GameAppObj = game_app;
     };
     return Main;
 }(egret.DisplayObjectContainer));

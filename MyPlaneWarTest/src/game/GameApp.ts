@@ -20,7 +20,7 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1 = new egret.Timer(1000);                    // 创建敌方飞机计时器1
         this.enemy_plane_timer2 = new egret.Timer(5000);                   // 创建敌方飞机计时器2
         this.enemy_plane_timer3 = new egret.Timer(20000);                   // 创建敌方飞机计时器3
-        this.boss_plane_timer = new egret.Timer(5000);                     // Boss计时器
+        this.boss_plane_timer = new egret.Timer(20000);                     // Boss计时器
         this.aerolite_timer = new egret.Timer(2000);                        // 陨石计时器
 
 
@@ -246,12 +246,16 @@ class GameApp extends egret.DisplayObjectContainer{
 
 
         // test
-        this.createPower(GameData.stageW / 2, 20);
+        this.createPower(aerolite_obj);
+        this.createBomb(GameData.myPlane);
         
     }
 
     /**创建power */
-    private createPower(temp_x:number, temp_y:number):void{
+    private createPower(display_obj:egret.DisplayObject):void{
+
+        let temp_x:number = display_obj.x;
+        let temp_y:number = display_obj.y;
         let power_type:number = Math.floor(Math.random() * 5) + 1;
 
         // 创建power
@@ -270,7 +274,18 @@ class GameApp extends egret.DisplayObjectContainer{
     }
 
 
+    /**创建爆炸特效 */
+    private createBomb(display_obj:egret.DisplayObject):void{
+        if (display_obj == null)
+            return ;
+        let x_temp:number = display_obj.x;
+        let y_temp:number = display_obj.y;
 
+        let bomb_obj:Bomb = Bomb.createBomb();
+        bomb_obj.x = x_temp;
+        bomb_obj.y = y_temp;
+        this.addChild(bomb_obj);
+    }
 
 
     // 创建子弹响应函数
@@ -376,6 +391,7 @@ class GameApp extends egret.DisplayObjectContainer{
             for(let index:number = 0; index < 3; ++index)
             {
                 let bullet_obj:Bullet = Bullet.createBullet(plane_obj.bullet_type);
+                bullet_obj.rotation = 0;                // 用了Boss的子弹缓存， 设置下旋转度
                 bullet_obj.x = plane_obj.x + (1 - index) * 55;
                 bullet_obj.y = plane_obj.y + plane_obj.width / 3;
                 bullet_obj.setHorizontalSpeed(0);

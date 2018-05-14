@@ -135,6 +135,7 @@ class Main extends egret.DisplayObjectContainer {
     private createGameScene() {
         let game_app:GameApp = new GameApp();
         this.addChild(game_app);
+        GameData.GameAppObj = game_app;
 
 
     }
