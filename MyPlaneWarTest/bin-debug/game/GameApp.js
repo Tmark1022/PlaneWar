@@ -28,6 +28,11 @@ var GameApp = (function (_super) {
         _this.enemy_plane_timer3 = new egret.Timer(20000); // 创建敌方飞机计时器3
         _this.boss_plane_timer = new egret.Timer(20000); // Boss计时器
         _this.aerolite_timer = new egret.Timer(2000); // 陨石计时器
+        _this.bullet_music = RES.getRes("bullet_mp3");
+        _this.bullet2_music = RES.getRes("bullet2_mp3");
+        _this.bg_music1 = RES.getRes("bgmusic_mp3");
+        _this.bg_music2 = RES.getRes("bgmusic2_mp3");
+        _this.bg_music_boss = RES.getRes("boss_music_mp3");
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -79,6 +84,9 @@ var GameApp = (function (_super) {
     GameApp.prototype.gameStart = function () {
         this.scroll_bg.startScroll(); // 开始滚动背景
         this.startTimeCount();
+        // this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music1.play(0, -1);
+        this.bg_music_channel.volume = 0.4;
     };
     /**开始计时器 */
     GameApp.prototype.startTimeCount = function () {
@@ -183,6 +191,10 @@ var GameApp = (function (_super) {
         GameData.enemyPlaneOnStage.push(enemy_plane);
         // 停止其他战机或物品的计时
         this.stopTimeCount();
+        // 更换music
+        this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music_boss.play(0, -1);
+        this.bg_music_channel.volume = 0.4;
     };
     /**创建陨石 */
     GameApp.prototype.createAerolite = function (evt) {
@@ -262,6 +274,7 @@ var GameApp = (function (_super) {
                     this.addChild(bullet_obj);
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
+                this.bullet_music.play(0, 1);
             }
             else if (my_plane_obj.bullet_type == 2) {
                 // 连发子弹
@@ -277,6 +290,7 @@ var GameApp = (function (_super) {
                     this.addChild(bullet_obj);
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
+                this.bullet_music.play(0, 1);
             }
             else if (my_plane_obj.bullet_type == 3) {
                 // 激光炮       
@@ -292,6 +306,7 @@ var GameApp = (function (_super) {
                     this.addChildAt(bullet_obj, 1); // 因为激活显示太厉害了，所以显示在图层的下方
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
+                this.bullet2_music.play(0, 1);
             }
         }
         else if (plane_obj.plane_type == 2) {

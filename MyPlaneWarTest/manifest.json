@@ -9,17 +9,17 @@
 	],
 	"game": [
 		"bin-debug/game/MovableBitMap.js",
-		"bin-debug/game/BulletEvent.js",
+		"bin-debug/Main.js",
 		"bin-debug/game/Aerolite.js",
 		"bin-debug/game/BgMgr.js",
 		"bin-debug/game/Bomb.js",
 		"bin-debug/game/Bullet.js",
-		"bin-debug/Main.js",
+		"bin-debug/game/Power.js",
 		"bin-debug/game/GameApp.js",
 		"bin-debug/game/GameData.js",
 		"bin-debug/LoadingUI.js",
 		"bin-debug/game/Plane.js",
 		"bin-debug/game/PlanrFactory.js",
-		"bin-debug/game/Power.js"
+		"bin-debug/game/BulletEvent.js"
 	]
 }

@@ -9,6 +9,14 @@ class GameApp extends egret.DisplayObjectContainer{
     boss_plane_timer:egret.Timer;
     aerolite_timer:egret.Timer;
 
+    bullet_music:egret.Sound;
+    bullet2_music:egret.Sound;
+    bg_music1:egret.Sound;
+    bg_music2:egret.Sound;
+    bg_music_boss:egret.Sound;
+    bg_music_channel:egret.SoundChannel;
+
+
     /**
      * 构造函数 
      */
@@ -23,6 +31,11 @@ class GameApp extends egret.DisplayObjectContainer{
         this.boss_plane_timer = new egret.Timer(20000);                     // Boss计时器
         this.aerolite_timer = new egret.Timer(2000);                        // 陨石计时器
 
+        this.bullet_music = RES.getRes("bullet_mp3");
+        this.bullet2_music = RES.getRes("bullet2_mp3");
+        this.bg_music1 = RES.getRes("bgmusic_mp3");
+        this.bg_music2 = RES.getRes("bgmusic2_mp3");
+        this.bg_music_boss = RES.getRes("boss_music_mp3");
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
@@ -59,7 +72,6 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
 
 
-
          // test
         let my_plane:PlaneBase = PlaneFactory.createPlane(1, "myplane_json.myplane");
         my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
@@ -76,10 +88,8 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addChild(my_plane);
         GameData.guardPlaneRight = <GuardPlane>my_plane;
 
-
         // 开始游戏
         this.gameStart();
-
     }
 
     /**
@@ -88,6 +98,10 @@ class GameApp extends egret.DisplayObjectContainer{
     private gameStart():any{
         this.scroll_bg.startScroll();               // 开始滚动背景
         this.startTimeCount();
+
+        // this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music1.play(0,-1);
+        this.bg_music_channel.volume = 0.4;
     }
 
     /**开始计时器 */
@@ -223,6 +237,11 @@ class GameApp extends egret.DisplayObjectContainer{
 
         // 停止其他战机或物品的计时
         this.stopTimeCount();
+
+        // 更换music
+        this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music_boss.play(0, -1);
+        this.bg_music_channel.volume = 0.4;
     }
 
 
@@ -273,7 +292,6 @@ class GameApp extends egret.DisplayObjectContainer{
         GameData.powerOnStage.push(power_obj);
     }
 
-
     /**创建爆炸特效 */
     private createBomb(display_obj:egret.DisplayObject):void{
         if (display_obj == null)
@@ -323,6 +341,7 @@ class GameApp extends egret.DisplayObjectContainer{
                     this.addChild(bullet_obj);
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
+                this.bullet_music.play(0, 1);
             }
             else if(my_plane_obj.bullet_type == 2){
                 // 连发子弹
@@ -341,7 +360,7 @@ class GameApp extends egret.DisplayObjectContainer{
                     this.addChild(bullet_obj);
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
-
+                this.bullet_music.play(0, 1);
             }
             else if(my_plane_obj.bullet_type == 3){
                 // 激光炮       
@@ -358,7 +377,7 @@ class GameApp extends egret.DisplayObjectContainer{
                     this.addChildAt(bullet_obj, 1);             // 因为激活显示太厉害了，所以显示在图层的下方
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
-
+                this.bullet2_music.play(0, 1);
             }
         }
         else if(plane_obj.plane_type == 2){
