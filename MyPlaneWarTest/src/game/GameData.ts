@@ -8,6 +8,9 @@ class GameData{
     static fpsOffset:number;                            // 相对于标准帧率的偏移值
     static fpsLastRecordTime:number;                    // 上一次记录帧率的时间(毫秒值)
     static GameAppObj:GameApp;                          // GameApp类对象
+    static InfoPanelObj:InfoPanel;                      // 信息面板对象
+
+    static Score:number;                                // 得分
 
 
     static planeCacheDict:Object = {};                  // 后台飞机缓存

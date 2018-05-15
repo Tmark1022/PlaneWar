@@ -28,6 +28,8 @@ var Bomb = (function (_super) {
         _this.sound_music = RES.getRes("explo_mp3");
         _this.scaleX = 1.3;
         _this.scaleY = 1.3;
+        _this.anchorOffsetX = _this.width / 2;
+        _this.anchorOffsetY = _this.height / 2;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         _this.addEventListener(egret.Event.REMOVED_FROM_STAGE, _this.removeFromStage, _this);
         _this.change_texture_timer.addEventListener(egret.TimerEvent.TIMER, _this.changeTextureFunc, _this);

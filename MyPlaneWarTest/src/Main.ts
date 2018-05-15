@@ -137,6 +137,12 @@ class Main extends egret.DisplayObjectContainer {
         this.addChild(game_app);
         GameData.GameAppObj = game_app;
 
+        let info_panel:InfoPanel = new InfoPanel();
+        this.addChild(info_panel);
+        GameData.InfoPanelObj = info_panel;
+        GameData.InfoPanelObj.visible = false;
+
+
 
     }
 }

@@ -16,7 +16,6 @@ class GameApp extends egret.DisplayObjectContainer{
     bg_music_boss:egret.Sound;
     bg_music_channel:egret.SoundChannel;
 
-
     /**
      * 构造函数 
      */
@@ -55,8 +54,7 @@ class GameApp extends egret.DisplayObjectContainer{
         GameData.stageW = this.stage.stageWidth;
         GameData.stageH = this.stage.stageHeight;
         GameData.targetFps = 60;
-        GameData.fpsOffset = 1;
-        GameData.fpsLastRecordTime = 0;
+        
         
         // 初始化滚动背景
         this.scroll_bg = new ScrollBg();
@@ -72,30 +70,49 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
 
 
+        let button:egret.Bitmap = new egret.Bitmap();
+        button.texture = RES.getRes("startbutton_png");
+        button.anchorOffsetX = button.width / 2;
+        button.anchorOffsetY = button.height / 2;
+        button.x = GameData.stageW / 2;
+        button.y = GameData.stageH / 2;
+        button.touchEnabled = true;
+        button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
+        this.addChild(button);
+
+        // 开始游戏
+        // this.gameStart();
+    }
+
+    private touchStartButton(evt:egret.TouchEvent):void{
          // test
         let my_plane:PlaneBase = PlaneFactory.createPlane(1, "myplane_json.myplane");
         my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
         this.addChild(my_plane);
         GameData.myPlane = <MyPlane>my_plane;
 
-        my_plane = PlaneFactory.createPlane(2, "myplane_json.myplane_add");
-        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
-        this.addChild(my_plane);
-        GameData.guardPlaneLeft = <GuardPlane>my_plane;
+        this.createGuardPlane();
 
-        my_plane = PlaneFactory.createPlane(2, "myplane_json.myplane_add");
-        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
-        this.addChild(my_plane);
-        GameData.guardPlaneRight = <GuardPlane>my_plane;
+        this.removeChild(evt.target);
 
-        // 开始游戏
         this.gameStart();
+
     }
+
 
     /**
      * 开始游戏
      */
     private gameStart():any{
+        // 初始化GameData
+        GameData.fpsOffset = 1;
+        GameData.fpsLastRecordTime = 0;
+        GameData.Score = 0;
+
+        GameData.InfoPanelObj.updateScore();
+        GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+        GameData.InfoPanelObj.visible = true;
+
         this.scroll_bg.startScroll();               // 开始滚动背景
         this.startTimeCount();
 
@@ -137,6 +154,25 @@ class GameApp extends egret.DisplayObjectContainer{
 
     }
 
+    /**创建护卫飞机 */
+    private createGuardPlane():void{
+        let my_plane:PlaneBase;
+        my_plane = PlaneFactory.createPlane(2, "myplane_json.myplane_add");
+        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+        my_plane.x = 0;
+        my_plane.y = my_plane.height;
+        this.addChild(my_plane);
+        GameData.guardPlaneLeft = <GuardPlane>my_plane;
+        egret.Tween.get(GameData.guardPlaneLeft).to({ x: GameData.myPlane.x - GameData.guardPlaneLeft.space_width, y:GameData.myPlane.y}, 2000, egret.Ease.circIn );
+
+        my_plane = PlaneFactory.createPlane(2, "myplane_json.myplane_add");
+        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+        my_plane.x = GameData.stageW;
+        my_plane.y = my_plane.height;
+        this.addChild(my_plane);
+        GameData.guardPlaneRight = <GuardPlane>my_plane;
+        egret.Tween.get(GameData.guardPlaneRight).to({ x: GameData.myPlane.x + GameData.guardPlaneRight.space_width, y:GameData.myPlane.y}, 2000, egret.Ease.circIn );
+    }
 
     /**创建敌机响应函数1 */
     private createEnemyPlane1(evt:egret.TimerEvent):void{
@@ -207,7 +243,6 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addChild(enemy_plane);
         GameData.enemyPlaneOnStage.push(enemy_plane);
     }
-
 
     /**创建Boss战机响应函数 */
     private createBossPlane(evt:egret.TimerEvent):void{
@@ -313,7 +348,7 @@ class GameApp extends egret.DisplayObjectContainer{
         if (plane_obj.plane_type == 1){
             let my_plane_obj:MyPlane = <MyPlane>plane_obj;
             my_plane_obj.setBulletLevel(3);
-            my_plane_obj.bullet_type = 3;
+            my_plane_obj.bullet_type = 2;
             
             if (my_plane_obj.bullet_type == 1){
                 // 平行子弹

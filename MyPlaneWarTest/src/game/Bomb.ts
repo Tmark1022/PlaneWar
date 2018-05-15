@@ -28,6 +28,8 @@ class Bomb extends egret.Bitmap{
 
         this.scaleX = 1.3;
         this.scaleY = 1.3;
+        this.anchorOffsetX = this.width / 2;
+        this.anchorOffsetY = this.height / 2;
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.removeFromStage, this);

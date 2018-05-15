@@ -129,6 +129,10 @@ var Main = (function (_super) {
         var game_app = new GameApp();
         this.addChild(game_app);
         GameData.GameAppObj = game_app;
+        var info_panel = new InfoPanel();
+        this.addChild(info_panel);
+        GameData.InfoPanelObj = info_panel;
+        GameData.InfoPanelObj.visible = false;
     };
     return Main;
 }(egret.DisplayObjectContainer));
