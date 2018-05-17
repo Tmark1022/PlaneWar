@@ -24,12 +24,13 @@ var GameApp = (function (_super) {
         // 初始化属性
         _this.scroll_bg = null;
         _this.enemy_plane_timer1 = new egret.Timer(1000); // 创建敌方飞机计时器1
-        _this.enemy_plane_timer2 = new egret.Timer(5000); // 创建敌方飞机计时器2
-        _this.enemy_plane_timer3 = new egret.Timer(20000); // 创建敌方飞机计时器3
+        _this.enemy_plane_timer2 = new egret.Timer(10000); // 创建敌方飞机计时器2
+        _this.enemy_plane_timer3 = new egret.Timer(15000); // 创建敌方飞机计时器3
         _this.boss_plane_timer = new egret.Timer(20000); // Boss计时器
-        _this.aerolite_timer = new egret.Timer(2000); // 陨石计时器
+        _this.aerolite_timer = new egret.Timer(10000); // 陨石计时器
         _this.bullet_music = RES.getRes("bullet_mp3");
         _this.bullet2_music = RES.getRes("bullet2_mp3");
+        _this.get_power_music = RES.getRes("getpower_mp3");
         _this.bg_music1 = RES.getRes("bgmusic_mp3");
         _this.bg_music2 = RES.getRes("bgmusic2_mp3");
         _this.bg_music_boss = RES.getRes("boss_music_mp3");
@@ -53,13 +54,6 @@ var GameApp = (function (_super) {
         // 初始化滚动背景
         this.scroll_bg = new ScrollBg();
         this.addChild(this.scroll_bg);
-        // 设置事件响应
-        this.enemy_plane_timer1.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane1, this);
-        this.enemy_plane_timer2.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane2, this);
-        this.enemy_plane_timer3.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane3, this);
-        this.boss_plane_timer.addEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
-        this.aerolite_timer.addEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
-        this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
         var button = new egret.Bitmap();
         button.texture = RES.getRes("startbutton_png");
         button.anchorOffsetX = button.width / 2;
@@ -69,16 +63,11 @@ var GameApp = (function (_super) {
         button.touchEnabled = true;
         button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
         this.addChild(button);
+        this.button = button;
         // 开始游戏
         // this.gameStart();
     };
     GameApp.prototype.touchStartButton = function (evt) {
-        // test
-        var my_plane = PlaneFactory.createPlane(1, "myplane_json.myplane");
-        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
-        this.addChild(my_plane);
-        GameData.myPlane = my_plane;
-        this.createGuardPlane();
         this.removeChild(evt.target);
         this.gameStart();
     };
@@ -90,9 +79,21 @@ var GameApp = (function (_super) {
         GameData.fpsOffset = 1;
         GameData.fpsLastRecordTime = 0;
         GameData.Score = 0;
+        // 创建我的战机
+        var my_plane = PlaneFactory.createPlane(1, "myplane_json.myplane");
+        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+        this.addChild(my_plane);
+        GameData.myPlane = my_plane;
         GameData.InfoPanelObj.updateScore();
         GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
         GameData.InfoPanelObj.visible = true;
+        // 设置事件响应
+        this.enemy_plane_timer1.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane1, this);
+        this.enemy_plane_timer2.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane2, this);
+        this.enemy_plane_timer3.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane3, this);
+        this.boss_plane_timer.addEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
+        this.aerolite_timer.addEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
+        this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
         this.scroll_bg.startScroll(); // 开始滚动背景
         this.startTimeCount();
         // this.bg_music_channel.stop();
@@ -239,9 +240,6 @@ var GameApp = (function (_super) {
         aerolite_obj.y = 0;
         this.addChild(aerolite_obj);
         GameData.aeroliteOnStage.push(aerolite_obj);
-        // test
-        this.createPower(aerolite_obj);
-        this.createBomb(GameData.myPlane);
     };
     /**创建power */
     GameApp.prototype.createPower = function (display_obj) {
@@ -277,8 +275,6 @@ var GameApp = (function (_super) {
         // 我方朱飞机发出的弹药和其他的不同
         if (plane_obj.plane_type == 1) {
             var my_plane_obj = plane_obj;
-            my_plane_obj.setBulletLevel(3);
-            my_plane_obj.bullet_type = 2;
             if (my_plane_obj.bullet_type == 1) {
                 // 平行子弹
                 var bullet_cnt = 1 + my_plane_obj.getBulletLevel();
@@ -357,7 +353,7 @@ var GameApp = (function (_super) {
                 bullet_obj.setHorizontalSpeed(-10 * (bullet_obj.rotation / 90));
                 bullet_obj.setVerticalSpeed(10);
                 this.addChild(bullet_obj);
-                GameData.myBulletOnStage.push(bullet_obj);
+                GameData.enemyBulletOnStage.push(bullet_obj);
             }
         }
         else if (plane_obj.plane_type == 6) {
@@ -370,7 +366,7 @@ var GameApp = (function (_super) {
                 bullet_obj.setHorizontalSpeed(0);
                 bullet_obj.setVerticalSpeed(10);
                 this.addChild(bullet_obj);
-                GameData.myBulletOnStage.push(bullet_obj);
+                GameData.enemyBulletOnStage.push(bullet_obj);
             }
         }
         else if (plane_obj.plane_type == 7) {
@@ -383,7 +379,7 @@ var GameApp = (function (_super) {
                 bullet_obj.setHorizontalSpeed(-10 * (bullet_obj.rotation / 90) + 2 * (index - 3));
                 bullet_obj.setVerticalSpeed(10);
                 this.addChild(bullet_obj);
-                GameData.myBulletOnStage.push(bullet_obj);
+                GameData.enemyBulletOnStage.push(bullet_obj);
             }
         }
         else {
@@ -408,6 +404,11 @@ var GameApp = (function (_super) {
                 reclaim_list.push(movable_bitmap_obj);
             }
         }
+        // 回收
+        this.reclaimMovableBitMapHelp(on_stage_list, reclaim_list, reclaim_func);
+    };
+    /** 回收可移动bitmap对象辅助函数*/
+    GameApp.prototype.reclaimMovableBitMapHelp = function (on_stage_list, reclaim_list, reclaim_func) {
         // 回收飞出边界的可移动对象
         for (var index = 0; index < reclaim_list.length; ++index) {
             var reclaim_obj = reclaim_list[index];
@@ -438,6 +439,126 @@ var GameApp = (function (_super) {
         this.moveAndCheckOutOfRangeHelp(GameData.aeroliteOnStage, Aerolite.reclaimAerolite);
         // power
         this.moveAndCheckOutOfRangeHelp(GameData.powerOnStage, Power.reclaimPower);
+        // 碰撞检测
+        this.gameHitTest();
+    };
+    /**游戏每帧碰撞检测 */
+    GameApp.prototype.gameHitTest = function () {
+        // 敌方子弹与主战机
+        if (GameData.myPlane.isInHurt() == false) {
+            var enemy_bullet_reclaim_list = [];
+            for (var index = 0; index < GameData.enemyBulletOnStage.length; ++index) {
+                var enemy_bullet_obj = GameData.enemyBulletOnStage[index];
+                if (HitTest.hitTestP(GameData.myPlane, enemy_bullet_obj, true)) {
+                    GameData.myPlane.blood -= enemy_bullet_obj.damage;
+                    GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                    enemy_bullet_reclaim_list.push(enemy_bullet_obj);
+                    // 开始处于受到伤害期间
+                    GameData.myPlane.hurtStart();
+                    break; // 避免同时受到两发以上伤害
+                }
+            }
+            this.reclaimMovableBitMapHelp(GameData.enemyBulletOnStage, enemy_bullet_reclaim_list, Bullet.reclaimBullet);
+        }
+        // 我方主战机与敌方战机
+        if (GameData.myPlane.isInHurt() == false) {
+            for (var index = 0; index < GameData.enemyPlaneOnStage.length; ++index) {
+                var enemy_plane_obj = GameData.enemyPlaneOnStage[index];
+                if (HitTest.hitTestP(enemy_plane_obj, GameData.myPlane)) {
+                    GameData.myPlane.blood -= 100; // 直接死亡
+                    GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                    break; // 避免同时受到两发以上伤害
+                }
+            }
+        }
+        // 我方主战机与陨石
+        if (GameData.myPlane.isInHurt() == false) {
+            for (var index = 0; index < GameData.aeroliteOnStage.length; ++index) {
+                var aerolite_obj = GameData.aeroliteOnStage[index];
+                if (HitTest.hitTestP(aerolite_obj, GameData.myPlane)) {
+                    GameData.myPlane.blood -= 100; // 直接死亡
+                    GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                    break; // 避免同时受到两发以上伤害
+                }
+            }
+        }
+        // 我方主战机与power
+        var power_reclaim_list = [];
+        for (var index = 0; index < GameData.powerOnStage.length; ++index) {
+            var power_obj = GameData.powerOnStage[index];
+            if (HitTest.hitTestP(GameData.myPlane, power_obj)) {
+                power_obj.powerWork(GameData.myPlane);
+                this.get_power_music.play(0, 1);
+                power_reclaim_list.push(power_obj);
+            }
+        }
+        this.reclaimMovableBitMapHelp(GameData.powerOnStage, power_reclaim_list, Power.reclaimPower);
+        // 我方子弹与敌方战机
+        var mybullet_reclaim_list_2 = [];
+        var enemy_plane_reclaim_list = [];
+        for (var index = 0; index < GameData.myBulletOnStage.length; ++index) {
+            var my_bullet_obj = GameData.myBulletOnStage[index];
+            for (var index_2 = 0; index_2 < GameData.enemyPlaneOnStage.length; ++index_2) {
+                var enemy_plane_obj = GameData.enemyPlaneOnStage[index_2];
+                // 敌机其实已经坏了
+                if (enemy_plane_obj.blood <= 0) {
+                    console.log("\u654C\u673A\u5176\u5B9E\u5DF2\u7ECF\u574F\u4E86, " + enemy_plane_obj.blood + ", " + enemy_plane_obj.plane_type);
+                    continue;
+                }
+                if (HitTest.hitTestP(enemy_plane_obj, my_bullet_obj)) {
+                    enemy_plane_obj.blood -= my_bullet_obj.damage;
+                    console.log("hit enemy_plane, " + my_bullet_obj.damage + ", " + enemy_plane_obj.blood + ", " + enemy_plane_obj.plane_score);
+                    if (enemy_plane_obj.blood <= 0) {
+                        // 敌机被打爆
+                        GameData.Score += enemy_plane_obj.plane_score;
+                        GameData.InfoPanelObj.updateScore();
+                        this.createBomb(enemy_plane_obj);
+                        enemy_plane_reclaim_list.push(enemy_plane_obj);
+                        // Boss被打败
+                        if (enemy_plane_obj.plane_type == 7) {
+                            // 停止其他战机或物品的计时
+                            this.startTimeCount();
+                            // 更换music
+                            this.bg_music_channel.stop();
+                            this.bg_music_channel = this.bg_music1.play(0, -1);
+                            this.bg_music_channel.volume = 0.4;
+                        }
+                    }
+                    mybullet_reclaim_list_2.push(my_bullet_obj);
+                    break; // 一颗子弹同时只能打击一个目标
+                }
+            }
+        }
+        this.reclaimMovableBitMapHelp(GameData.myBulletOnStage, mybullet_reclaim_list_2, Bullet.reclaimBullet);
+        this.reclaimMovableBitMapHelp(GameData.enemyPlaneOnStage, enemy_plane_reclaim_list, PlaneFactory.reclaimPlaneObjToCache);
+        // 我方子弹与陨石
+        var mybullet_reclaim_list = [];
+        var aerolite_reclaim_list = [];
+        for (var index = 0; index < GameData.myBulletOnStage.length; ++index) {
+            var my_bullet_obj = GameData.myBulletOnStage[index];
+            for (var index_2 = 0; index_2 < GameData.aeroliteOnStage.length; ++index_2) {
+                var aerolite_obj = GameData.aeroliteOnStage[index_2];
+                // 陨石其实已经坏了
+                if (aerolite_obj.blood <= 0)
+                    continue;
+                if (HitTest.hitTestP(aerolite_obj, my_bullet_obj)) {
+                    aerolite_obj.blood -= my_bullet_obj.damage;
+                    if (aerolite_obj.blood <= 0) {
+                        // 陨石被打爆，产生power
+                        GameData.Score += 50;
+                        GameData.InfoPanelObj.updateScore();
+                        this.createBomb(aerolite_obj);
+                        this.createPower(aerolite_obj);
+                        aerolite_reclaim_list.push(aerolite_obj);
+                    }
+                    mybullet_reclaim_list.push(my_bullet_obj);
+                    break; // 一颗子弹同时只能打击一个目标
+                }
+            }
+        }
+        this.reclaimMovableBitMapHelp(GameData.myBulletOnStage, mybullet_reclaim_list, Bullet.reclaimBullet);
+        this.reclaimMovableBitMapHelp(GameData.aeroliteOnStage, aerolite_reclaim_list, Aerolite.reclaimAerolite);
+        // 我的飞机血量
     };
     return GameApp;
 }(egret.DisplayObjectContainer));

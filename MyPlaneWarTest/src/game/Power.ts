@@ -78,7 +78,7 @@ class Power extends MovableBitMap{
 
     }
 
-        /**加入舞台 */
+    /**离开舞台 */
     private removeFromStage(evt:egret.Event):void{
         this.texture_timer.stop();
     }
@@ -103,7 +103,6 @@ class Power extends MovableBitMap{
             return false;
     }
 
-
     /**
      * 每帧移动轨迹
      */
@@ -123,6 +122,93 @@ class Power extends MovableBitMap{
             this.x -= this.speed / 2 * GameData.fpsOffset;
 
         this.y += this.speed * GameData.fpsOffset;
+    }
+
+    /**获得power，使power生效 */
+    public powerWork(myplane:MyPlane):any{
+        if (myplane == null)
+            return ;
+
+        switch(this.power_type){
+            case 1:{
+                    // 平行子弹（基础）
+                    if (myplane.bullet_type == 1){
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else{
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else{
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 1;
+                    }
+                } break;
+            case 2:{
+                    // 散弹
+                    if (myplane.bullet_type == 2){
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else{
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else{
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 2;
+                    }
+                } break;
+            case 3:{
+                    // 激光炮
+                    if (myplane.bullet_type == 3){
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else{
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else{
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 3;
+                    }
+                } break;
+            case 4:{
+                    // 护卫飞机
+                    if (GameData.guardPlaneLeft == null){
+                        GameData.GameAppObj.createGuardPlane();
+                    }   
+                    else{
+                        // 已经创建就加分
+                        GameData.Score += 100;
+                        GameData.InfoPanelObj.updateScore();
+                    }
+                } break;
+            case 5:{
+                // 加血
+                    if (myplane.blood >= 100){
+                        // 满血， 加分
+                        GameData.Score += 100;
+                        GameData.InfoPanelObj.updateScore();
+                    }
+                    else{
+                        let temp_blood:number = myplane.blood + 50;
+                        if (temp_blood > 100)
+                            myplane.blood = 100;
+                        else
+                            myplane.blood = temp_blood;
+                        GameData.InfoPanelObj.updateBlood(myplane.blood);
+                    }
+                }break;
+        }
     }
 
 }

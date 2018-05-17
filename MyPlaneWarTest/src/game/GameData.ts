@@ -12,7 +12,6 @@ class GameData{
 
     static Score:number;                                // 得分
 
-
     static planeCacheDict:Object = {};                  // 后台飞机缓存
     static bulletCacheDict:Object = {};                 // 后台子弹缓存
     static aeroliteCacheList:Aerolite[] = [];           // 陨石缓存

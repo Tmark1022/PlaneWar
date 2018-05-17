@@ -1,7 +1,7 @@
 /**
  * Buff能量类
  * {1:子弹类型1, 2:子弹类型2, 3:子弹类型3, 4:护卫机Buff, 5:飞机生命}
- * test git over
+ * test git
  */
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
@@ -81,7 +81,7 @@ var Power = (function (_super) {
         this.texture = this.texture_list[this.now_index];
         this.texture_timer.start();
     };
-    /**加入舞台 */
+    /**离开舞台 */
     Power.prototype.removeFromStage = function (evt) {
         this.texture_timer.stop();
     };
@@ -117,6 +117,101 @@ var Power = (function (_super) {
         else
             this.x -= this.speed / 2 * GameData.fpsOffset;
         this.y += this.speed * GameData.fpsOffset;
+    };
+    /**获得power，使power生效 */
+    Power.prototype.powerWork = function (myplane) {
+        if (myplane == null)
+            return;
+        switch (this.power_type) {
+            case 1:
+                {
+                    // 平行子弹（基础）
+                    if (myplane.bullet_type == 1) {
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else {
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else {
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 1;
+                    }
+                }
+                break;
+            case 2:
+                {
+                    // 散弹
+                    if (myplane.bullet_type == 2) {
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else {
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else {
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 2;
+                    }
+                }
+                break;
+            case 3:
+                {
+                    // 激光炮
+                    if (myplane.bullet_type == 3) {
+                        // 同种子弹，子弹升级
+                        if (myplane.getBulletLevel() < 3)
+                            myplane.setBulletLevel(myplane.getBulletLevel() + 1);
+                        else {
+                            // 已经满级就加分
+                            GameData.Score += 100;
+                            GameData.InfoPanelObj.updateScore();
+                        }
+                    }
+                    else {
+                        // 不同子弹就切换子弹类型
+                        myplane.bullet_type = 3;
+                    }
+                }
+                break;
+            case 4:
+                {
+                    // 护卫飞机
+                    if (GameData.guardPlaneLeft == null) {
+                        GameData.GameAppObj.createGuardPlane();
+                    }
+                    else {
+                        // 已经创建就加分
+                        GameData.Score += 100;
+                        GameData.InfoPanelObj.updateScore();
+                    }
+                }
+                break;
+            case 5:
+                {
+                    // 加血
+                    if (myplane.blood >= 100) {
+                        // 满血， 加分
+                        GameData.Score += 100;
+                        GameData.InfoPanelObj.updateScore();
+                    }
+                    else {
+                        var temp_blood = myplane.blood + 50;
+                        if (temp_blood > 100)
+                            myplane.blood = 100;
+                        else
+                            myplane.blood = temp_blood;
+                        GameData.InfoPanelObj.updateBlood(myplane.blood);
+                    }
+                }
+                break;
+        }
     };
     return Power;
 }(MovableBitMap));

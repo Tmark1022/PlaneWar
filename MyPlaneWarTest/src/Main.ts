@@ -142,7 +142,5 @@ class Main extends egret.DisplayObjectContainer {
         GameData.InfoPanelObj = info_panel;
         GameData.InfoPanelObj.visible = false;
 
-
-
     }
 }

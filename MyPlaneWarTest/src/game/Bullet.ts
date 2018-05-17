@@ -7,7 +7,7 @@ class Bullet extends MovableBitMap{
     private bullet_type:number;                         // 子弹类型
     private vertical_speed:number;                      // 子弹垂直速度（正数往下移动， 负数往上移动）
     private horizontal_speed:number;                    // 子弹水平速度（正数往右移动， 负数往左移动）
-    private damage:number;                              // 子弹伤害
+    damage:number;                                      // 子弹伤害
 
     /**
      * 静态成员函数
@@ -79,7 +79,6 @@ class Bullet extends MovableBitMap{
         // 初始化成员属性
         this.bullet_type = bullet_type_temp;
         this.damage = damage_temp;
-
     }
 
     /**

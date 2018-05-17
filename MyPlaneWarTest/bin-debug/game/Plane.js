@@ -24,6 +24,8 @@ var PlaneBase = (function (_super) {
         // 初始化成员属性
         _this.speed = 1;
         _this.blood = 0;
+        _this.blood_init = 0;
+        _this.plane_score = 0;
         _this.fire_delay = 0;
         _this.fire_timer = null;
         _this.bullet_type = 1;
@@ -34,6 +36,8 @@ var PlaneBase = (function (_super) {
     }
     // 加入舞台后自动开火
     PlaneBase.prototype.onAddToStage = function (evt) {
+        // 初始化血量
+        this.blood = this.blood_init;
         this.startFire();
     };
     // 离开舞台后制动停火
@@ -105,11 +109,15 @@ var MyPlane = (function (_super) {
         }
         // 初始化变量
         // this.speed = 1;  不需要speed因为我的战机是我自己控制的。
-        _this.blood = 100;
+        _this.blood_init = 100;
+        _this.plane_score = 0;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 300;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 1;
         _this.bullet_level = 1; // 子弹等级
+        _this.hurt_show_timer = new egret.Timer(1500 / 18, 18);
+        _this.is_in_hurt = false;
         return _this;
     }
     MyPlane.prototype.onAddToStage = function (evt) {
@@ -121,6 +129,8 @@ var MyPlane = (function (_super) {
         this.startFire();
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.startTouchMove, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.stopTouchMove, this);
+        this.hurt_show_timer.addEventListener(egret.TimerEvent.TIMER, this.hurtShowFunc, this);
+        this.hurt_show_timer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, this.hurtShowCompleteFunc, this);
     };
     MyPlane.prototype.onRemoveFromStage = function (evt) {
         this.touchEnabled = false;
@@ -177,6 +187,35 @@ var MyPlane = (function (_super) {
             return;
         this.bullet_level = new_level;
     };
+    /**受到伤害响应函数 */
+    MyPlane.prototype.hurtShowFunc = function (evt) {
+        if (this.alpha == 1)
+            this.alpha = 0.2;
+        else
+            this.alpha = 1;
+    };
+    /**受到伤害完成响应函数 */
+    MyPlane.prototype.hurtShowCompleteFunc = function (evt) {
+        this.alpha = 1;
+        this.hurtStop();
+    };
+    /**开始伤害 */
+    MyPlane.prototype.hurtStart = function () {
+        if (this.is_in_hurt)
+            return;
+        this.hurt_show_timer.start();
+        this.is_in_hurt = true;
+    };
+    /**结束伤害 */
+    MyPlane.prototype.hurtStop = function () {
+        this.hurt_show_timer.stop();
+        this.is_in_hurt = false;
+        this.hurt_show_timer.reset();
+    };
+    /**是否在伤害特效中 */
+    MyPlane.prototype.isInHurt = function () {
+        return this.is_in_hurt;
+    };
     MyPlane.planeClassType = 1; // 飞机类型校验
     return MyPlane;
 }(PlaneBase));
@@ -190,6 +229,9 @@ var GuardPlane = (function (_super) {
             console.log('类GuardPlane初始化时飞机类型校验不成功' + GuardPlane.planeClassType + "!= " + plane_type);
         }
         // 初始化变量
+        _this.blood_init = 0;
+        _this.plane_score = 0;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 500;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 1;
@@ -214,7 +256,9 @@ var NormalPlane1 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 4;
-        _this.blood = 1;
+        _this.blood_init = 20;
+        _this.plane_score = 10;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 900;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 4; // 修改子弹类型
@@ -242,7 +286,9 @@ var NormalPlane2 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 4;
-        _this.blood = 1;
+        _this.blood_init = 20;
+        _this.plane_score = 10;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 900;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 5; // 修改子弹类型
@@ -272,7 +318,9 @@ var NormalPlane3 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 2;
-        _this.blood = 10;
+        _this.blood_init = 250;
+        _this.plane_score = 100;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 800;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 6; // 修改子弹类型
@@ -303,6 +351,8 @@ var NormalPlane3 = (function (_super) {
     };
     // 加入舞台后自动开火
     NormalPlane3.prototype.onAddToStage = function (evt) {
+        // 初始化血量
+        this.blood = this.blood_init;
         this.move_right = true;
         this.move_down = true;
         this.startFire();
@@ -321,7 +371,9 @@ var NormalPlane4 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 0.5;
-        _this.blood = 100;
+        _this.blood_init = 500;
+        _this.plane_score = 100;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 1000;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 7; // 修改子弹类型
@@ -370,7 +422,9 @@ var BossPlane = (function (_super) {
         }
         // 初始化变量
         _this.speed = 1;
-        _this.blood = 2000;
+        _this.blood_init = 5000;
+        _this.plane_score = 1000;
+        _this.blood = _this.blood_init;
         _this.fire_delay = 400;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 7; // 修改子弹类型
@@ -401,6 +455,8 @@ var BossPlane = (function (_super) {
     };
     // 加入舞台后自动开火
     BossPlane.prototype.onAddToStage = function (evt) {
+        // 初始化血量
+        this.blood = this.blood_init;
         this.move_right = true;
         this.move_down = true;
         this.startFire();

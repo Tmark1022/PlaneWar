@@ -5,7 +5,7 @@
 class Aerolite extends MovableBitMap{
     private speed:number;
     private move_right:boolean;
-    private blood:number;
+    public blood:number;
 
     /**创建陨石 */
     public static createAerolite(texture_name_temp:string):Aerolite{
