@@ -126,9 +126,13 @@ var MyPlane = (function (_super) {
         this.y = GameData.stageH - this.width;
         this.touchEnabled = true;
         this.bullet_level = 1; // 子弹等级
+        this.bullet_type = 1; // 初始化子弹类型
+        this.blood = this.blood_init; // 初始化血量
         this.startFire();
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.startTouchMove, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.stopTouchMove, this);
+        this.hurt_show_timer.reset();
+        this.is_in_hurt = false;
         this.hurt_show_timer.addEventListener(egret.TimerEvent.TIMER, this.hurtShowFunc, this);
         this.hurt_show_timer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, this.hurtShowCompleteFunc, this);
     };
@@ -137,6 +141,8 @@ var MyPlane = (function (_super) {
         this.stopFire();
         this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.startTouchMove, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_END, this.stopTouchMove, this);
+        this.hurt_show_timer.removeEventListener(egret.TimerEvent.TIMER, this.hurtShowFunc, this);
+        this.hurt_show_timer.removeEventListener(egret.TimerEvent.TIMER_COMPLETE, this.hurtShowCompleteFunc, this);
     };
     /**开始触摸 */
     MyPlane.prototype.startTouchMove = function (evt) {

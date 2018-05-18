@@ -26,7 +26,7 @@ var GameApp = (function (_super) {
         _this.enemy_plane_timer1 = new egret.Timer(1000); // 创建敌方飞机计时器1
         _this.enemy_plane_timer2 = new egret.Timer(10000); // 创建敌方飞机计时器2
         _this.enemy_plane_timer3 = new egret.Timer(15000); // 创建敌方飞机计时器3
-        _this.boss_plane_timer = new egret.Timer(20000); // Boss计时器
+        _this.boss_plane_timer = new egret.Timer(180000); // Boss计时器
         _this.aerolite_timer = new egret.Timer(10000); // 陨石计时器
         _this.bullet_music = RES.getRes("bullet_mp3");
         _this.bullet2_music = RES.getRes("bullet2_mp3");
@@ -47,28 +47,29 @@ var GameApp = (function (_super) {
      * 创建游戏场景
      */
     GameApp.prototype.createGameView = function () {
-        // 初始化GmaeData的一些需要初始化的数据
+        // 初始化GmaeData的全局都在使用的基础数据
         GameData.stageW = this.stage.stageWidth;
         GameData.stageH = this.stage.stageHeight;
         GameData.targetFps = 60;
         // 初始化滚动背景
         this.scroll_bg = new ScrollBg();
         this.addChild(this.scroll_bg);
-        var button = new egret.Bitmap();
-        button.texture = RES.getRes("startbutton_png");
-        button.anchorOffsetX = button.width / 2;
-        button.anchorOffsetY = button.height / 2;
-        button.x = GameData.stageW / 2;
-        button.y = GameData.stageH / 2;
-        button.touchEnabled = true;
-        button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
-        this.addChild(button);
-        this.button = button;
-        // 开始游戏
-        // this.gameStart();
+        // 初始化主背景
+        this.start_main_bg = new StartMainBg();
+        this.addChild(this.start_main_bg);
+        this.start_main_bg.start_button.touchEnabled = true;
+        this.start_main_bg.start_button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
+        // 开始播放背景音乐
+        if (this.bg_music_channel != null)
+            this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music2.play(0, -1);
+        this.bg_music_channel.volume = 0.4;
     };
+    /**点击开始按钮 */
     GameApp.prototype.touchStartButton = function (evt) {
-        this.removeChild(evt.target);
+        this.start_main_bg.start_button.touchEnabled = false;
+        this.start_main_bg.start_button.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
+        this.removeChild(this.start_main_bg);
         this.gameStart();
     };
     /**
@@ -80,10 +81,13 @@ var GameApp = (function (_super) {
         GameData.fpsLastRecordTime = 0;
         GameData.Score = 0;
         // 创建我的战机
-        var my_plane = PlaneFactory.createPlane(1, "myplane_json.myplane");
-        my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
-        this.addChild(my_plane);
-        GameData.myPlane = my_plane;
+        if (GameData.myPlane == null) {
+            var my_plane = PlaneFactory.createPlane(1, "myplane_json.myplane");
+            my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+            GameData.myPlane = my_plane;
+        }
+        this.addChild(GameData.myPlane);
+        /**显示面板 */
         GameData.InfoPanelObj.updateScore();
         GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
         GameData.InfoPanelObj.visible = true;
@@ -96,7 +100,9 @@ var GameApp = (function (_super) {
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
         this.scroll_bg.startScroll(); // 开始滚动背景
         this.startTimeCount();
-        // this.bg_music_channel.stop();
+        // 开始播放背景音乐
+        if (this.bg_music_channel != null)
+            this.bg_music_channel.stop();
         this.bg_music_channel = this.bg_music1.play(0, -1);
         this.bg_music_channel.volume = 0.4;
     };
