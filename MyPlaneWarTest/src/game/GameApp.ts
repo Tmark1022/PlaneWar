@@ -18,6 +18,7 @@ class GameApp extends egret.DisplayObjectContainer{
     bg_music_channel:egret.SoundChannel;
 
     start_main_bg:StartMainBg;
+    end_main_bg:EndMainBg;
 
     /**
      * 构造函数 
@@ -68,6 +69,7 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addChild(this.start_main_bg);
         this.start_main_bg.start_button.touchEnabled = true;
         this.start_main_bg.start_button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
+
         // 开始播放背景音乐
         if (this.bg_music_channel != null)
             this.bg_music_channel.stop();
@@ -95,12 +97,12 @@ class GameApp extends egret.DisplayObjectContainer{
         // 创建我的战机
         if(GameData.myPlane == null){
             let my_plane:PlaneBase = PlaneFactory.createPlane(1, "myplane_json.myplane");
-            my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
             GameData.myPlane = <MyPlane>my_plane;
         }
+        GameData.myPlane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
         this.addChild(GameData.myPlane);
         
-        /**显示面板 */
+        /**显示数据面板 */
         GameData.InfoPanelObj.updateScore();
         GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
         GameData.InfoPanelObj.visible = true;
@@ -114,7 +116,7 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
 
         this.scroll_bg.startScroll();               // 开始滚动背景
-        this.startTimeCount();
+        this.startTimeCount();                      // 开始计时器计时
 
         // 开始播放背景音乐
         if (this.bg_music_channel != null)
@@ -142,19 +144,111 @@ class GameApp extends egret.DisplayObjectContainer{
     }
 
     /**
-     * 暂停游戏
+     * 结束游戏
      */
     private gameStop():any{
-        this.scroll_bg.stopScroll();               // 停止滚动背景
-        this.stopTimeCount();
+        // 我的战机
+        GameData.myPlane.removeEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+        this.removeChild(GameData.myPlane);
+
+        // 护卫机
+        if (GameData.guardPlaneLeft != null)
+        {
+            GameData.guardPlaneLeft.removeEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+            this.removeChild(GameData.guardPlaneLeft);
+            GameData.guardPlaneLeft = null;
+
+            GameData.guardPlaneRight.removeEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+            this.removeChild(GameData.guardPlaneRight);
+            GameData.guardPlaneRight = null;
+        }
+
+        // 回收敌方飞机
+        for (let index:number = 0; index < GameData.enemyPlaneOnStage.length; ++index){
+            let enemy_plane:PlaneBase = GameData.enemyPlaneOnStage[index];
+            this.removeChild(enemy_plane);
+            PlaneFactory.reclaimPlaneObjToCache(enemy_plane);
+        }
+        GameData.enemyPlaneOnStage = [];
+
+        // 回收我方子弹
+        for (let index:number = 0; index < GameData.myBulletOnStage.length; ++index){
+            let my_bullet:Bullet = GameData.myBulletOnStage[index];
+            this.removeChild(my_bullet);
+            Bullet.reclaimBullet(my_bullet);
+        }
+        GameData.myBulletOnStage = [];
+
+        // 回收敌方子弹
+        for (let index:number = 0; index < GameData.enemyBulletOnStage.length; ++index){
+            let enemy_bullet:Bullet = GameData.enemyBulletOnStage[index];
+            this.removeChild(enemy_bullet);
+            Bullet.reclaimBullet(enemy_bullet);
+        }
+        GameData.enemyBulletOnStage = [];
+
+        // 回收陨石
+        for (let index:number = 0; index < GameData.aeroliteOnStage.length; ++index){
+            let aerolite_temp:Aerolite = GameData.aeroliteOnStage[index];
+            this.removeChild(aerolite_temp);
+            Aerolite.reclaimAerolite(aerolite_temp);
+        }
+        GameData.aeroliteOnStage = [];
+
+        // 回收power
+        for (let index:number = 0; index < GameData.powerOnStage.length; ++index){
+            let power_temp:Power = GameData.powerOnStage[index];
+            this.removeChild(power_temp);
+            Power.reclaimPower(power_temp);
+        }
+        GameData.powerOnStage = [];
+
+         // 取消事件响应
+        this.enemy_plane_timer1.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane1, this);
+        this.enemy_plane_timer2.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane2, this);
+        this.enemy_plane_timer3.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane3, this);
+        this.boss_plane_timer.removeEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
+        this.aerolite_timer.removeEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
+        this.removeEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
+
+        this.scroll_bg.stopScroll();                // 停止滚动背景
+        this.stopTimeCount();                       // 停止计时器计时
 
 
-
-
-
-
-
+        // 结束界面
+        if (this.end_main_bg == null){
+            this.end_main_bg = new EndMainBg();
+        }
+        this.end_main_bg.updateScore();
+        this.addChild(this.end_main_bg);
+        this.end_main_bg.touchEnabled = true;
+        this.end_main_bg.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchEndMainBg, this)
     }
+
+    /**点击结束界面 */
+    private touchEndMainBg(evt:egret.TouchEvent):void{
+        // 删除结束界面
+        this.end_main_bg.touchEnabled = false;
+        this.end_main_bg.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.touchEndMainBg, this);
+        this.removeChild(this.end_main_bg);
+
+        // 隐藏数据界面
+        GameData.InfoPanelObj.visible = false;
+
+        // 创建开始界面
+        if (this.start_main_bg == null)
+            this.start_main_bg = new StartMainBg();
+        this.addChild(this.start_main_bg);
+        this.start_main_bg.start_button.touchEnabled = true;
+        this.start_main_bg.start_button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchStartButton, this);
+        
+        // 开始播放背景音乐
+        if (this.bg_music_channel != null)
+            this.bg_music_channel.stop();
+        this.bg_music_channel = this.bg_music2.play(0,-1);
+        this.bg_music_channel.volume = 0.4;
+    }
+
 
     /**
      * 重新游戏
@@ -505,9 +599,15 @@ class GameApp extends egret.DisplayObjectContainer{
         // 回收飞出边界的可移动对象
         for (let index:number = 0; index < reclaim_list.length; ++index){
             let reclaim_obj:MovableBitMap = reclaim_list[index];
-
             this.removeChild(reclaim_obj);
             on_stage_list.splice(on_stage_list.indexOf(reclaim_obj), 1);
+
+            if (reclaim_func == PlaneFactory.reclaimPlaneObjToCache)
+            {
+                // 如果是飞机
+                let plane_obj:PlaneBase = <PlaneBase>reclaim_obj;
+                reclaim_obj.removeEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
+            }
             reclaim_func(reclaim_obj);
         }
     }
@@ -618,13 +718,13 @@ class GameApp extends egret.DisplayObjectContainer{
 
                     // 敌机其实已经坏了
                     if (enemy_plane_obj.blood <= 0){
-                        console.log(`敌机其实已经坏了, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_type}`);
+                        // console.log(`敌机其实已经坏了, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_type}`);
                         continue;
                     }
                     
                     if (HitTest.hitTestP(enemy_plane_obj, my_bullet_obj)){
                         enemy_plane_obj.blood -= my_bullet_obj.damage;
-                        console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
+                        // console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
                         if (enemy_plane_obj.blood <= 0){
                             // 敌机被打爆
                             GameData.Score += enemy_plane_obj.plane_score;
@@ -642,7 +742,6 @@ class GameApp extends egret.DisplayObjectContainer{
                                 this.bg_music_channel = this.bg_music1.play(0, -1);
                                 this.bg_music_channel.volume = 0.4;
                             }
-
 
                         }
                         mybullet_reclaim_list_2.push(my_bullet_obj);
@@ -685,9 +784,8 @@ class GameApp extends egret.DisplayObjectContainer{
             this.reclaimMovableBitMapHelp(GameData.myBulletOnStage, mybullet_reclaim_list, Bullet.reclaimBullet);
             this.reclaimMovableBitMapHelp(GameData.aeroliteOnStage, aerolite_reclaim_list, Aerolite.reclaimAerolite);
 
-
             // 我的飞机血量
-
-
+            if (GameData.myPlane.blood <= 0)
+                this.gameStop();
     }
 }

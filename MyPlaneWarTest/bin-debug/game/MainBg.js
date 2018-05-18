@@ -54,11 +54,10 @@ var EndMainBg = (function (_super) {
         this.bg_shape.graphics.beginFill(0x969696);
         this.bg_shape.graphics.drawRect(0, 0, GameData.stageW, GameData.stageH);
         this.bg_shape.graphics.endFill();
+        this.bg_shape.alpha = 0.5;
         this.addChild(this.bg_shape);
         this.text_field = new egret.TextField();
-        this.text_field.anchorOffsetX = this.text_field.width / 2;
-        this.text_field.anchorOffsetY = this.text_field.height / 2;
-        this.text_field.x = GameData.stageW / 2;
+        this.text_field.x = GameData.stageW / 5 * 2;
         this.text_field.y = GameData.stageH / 2;
         this.addChild(this.text_field);
     };
