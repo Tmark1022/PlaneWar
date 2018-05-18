@@ -211,6 +211,9 @@ var MyPlane = (function (_super) {
             return;
         this.hurt_show_timer.start();
         this.is_in_hurt = true;
+        var hurt_sound = RES.getRes("plane_bomb_mp3");
+        var channel = hurt_sound.play(0, 1);
+        channel.volume = 0.8;
     };
     /**结束伤害 */
     MyPlane.prototype.hurtStop = function () {

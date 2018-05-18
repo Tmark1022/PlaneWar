@@ -19,24 +19,51 @@ var ScrollBg = (function (_super) {
     __extends(ScrollBg, _super);
     function ScrollBg() {
         var _this = _super.call(this) || this;
-        _this.bg_bitmap_array = []; // 背景数组
         _this.scroll_speed = 2; // 滚动速度
-        _this.once(egret.Event.ADDED_TO_STAGE, _this.onAddedToStage, _this);
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddedToStage, _this);
         return _this;
     }
     ScrollBg.prototype.onAddedToStage = function (evt) {
-        this.initScrollBgData();
         console.log("init ScrollBg successfully.");
+    };
+    ScrollBg.prototype.refreshBgTextute = function () {
+        this.initScrollBgData();
     };
     /**
      * 初始化滚动背景数据
      */
     ScrollBg.prototype.initScrollBgData = function () {
+        this.bg_bitmap_array = [];
         // 初始化舞台宽高
         this.stage_h = this.stage.stageHeight;
         this.stage_w = this.stage.stageWidth;
         // 初始化纹理高
-        var texture = RES.getRes("bg_png");
+        var bg_num = Math.floor(Math.random() * 6) + 1;
+        var texture_name;
+        switch (bg_num) {
+            case 1:
+                texture_name = "bg_png";
+                break;
+            case 2:
+                texture_name = "bg2_jpg";
+                break;
+            case 3:
+                texture_name = "bg3_jpg";
+                break;
+            case 4:
+                texture_name = "bg4_jpg";
+                break;
+            case 5:
+                texture_name = "bg5_jpg";
+                break;
+            case 6:
+                texture_name = "bg6_jpg";
+                break;
+            default:
+                texture_name = "bg_png";
+                break;
+        }
+        var texture = RES.getRes(texture_name);
         this.bg_picture_h = texture.textureHeight;
         // 计算完成滚动需要多少图片
         this.bg_bitmap_cnt = Math.ceil(this.stage_h / this.bg_picture_h) + 1;
@@ -49,7 +76,6 @@ var ScrollBg = (function (_super) {
             this.addChild(bitmap_obj);
             this.bg_bitmap_array.push(bitmap_obj);
         }
-        //console.log( this.bg_bitmap_array);
     };
     /**
      * 开始背景滚动

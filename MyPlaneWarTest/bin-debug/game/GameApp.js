@@ -100,6 +100,7 @@ var GameApp = (function (_super) {
         this.boss_plane_timer.addEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
         this.aerolite_timer.addEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
+        this.scroll_bg.refreshBgTextute(); // 刷新背景纹理
         this.scroll_bg.startScroll(); // 开始滚动背景
         this.startTimeCount(); // 开始计时器计时
         // 开始播放背景音乐

@@ -4,7 +4,7 @@
 
 // 滚动背景
 class ScrollBg extends egret.DisplayObjectContainer{
-    private bg_bitmap_array:egret.Bitmap[] = [];            // 背景数组
+    private bg_bitmap_array:egret.Bitmap[];                 // 背景数组
     private bg_bitmap_cnt:number;                           // 数组长度
     private bg_picture_h:number;                            // 背景图片(纹理)高度
     private stage_w:number;                                 // 舞台宽度
@@ -13,24 +13,42 @@ class ScrollBg extends egret.DisplayObjectContainer{
 
     constructor(){
         super();
-        this.once(egret.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
+        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddedToStage, this);
     }
 
     private onAddedToStage(evt:egret.Event):void{
-        this.initScrollBgData();
         console.log("init ScrollBg successfully.");
     }
-    
+
+    public refreshBgTextute(){
+        this.initScrollBgData();
+    }
+
+
     /**
      * 初始化滚动背景数据
      */
     private initScrollBgData():any{
+        this.bg_bitmap_array = [];
         // 初始化舞台宽高
         this.stage_h = this.stage.stageHeight;
         this.stage_w = this.stage.stageWidth;
         
         // 初始化纹理高
-        let texture:egret.Texture = RES.getRes("bg_png");
+        let bg_num:number = Math.floor( Math.random() * 6) + 1;
+        let texture_name:string;
+        switch(bg_num){
+            case 1: texture_name = "bg_png"; break;
+            case 2: texture_name = "bg2_jpg"; break;
+            case 3: texture_name = "bg3_jpg"; break;
+            case 4: texture_name = "bg4_jpg"; break;
+            case 5: texture_name = "bg5_jpg"; break;
+            case 6: texture_name = "bg6_jpg"; break;
+            default:texture_name = "bg_png"; break;
+        }
+
+
+        let texture:egret.Texture = RES.getRes(texture_name);
 
         this.bg_picture_h = texture.textureHeight;
 
@@ -46,8 +64,6 @@ class ScrollBg extends egret.DisplayObjectContainer{
             this.addChild(bitmap_obj);
             this.bg_bitmap_array.push(bitmap_obj);
         }
-
-        //console.log( this.bg_bitmap_array);
     }
 
     /**

@@ -244,6 +244,9 @@ class MyPlane extends PlaneBase{
             return ;
         this.hurt_show_timer.start();
         this.is_in_hurt = true;
+        let hurt_sound:egret.Sound = RES.getRes("plane_bomb_mp3");
+        let channel:egret.SoundChannel = hurt_sound.play(0 ,1);
+        channel.volume = 0.8;
     }
 
     /**结束伤害 */

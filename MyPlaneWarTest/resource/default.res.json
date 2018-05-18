@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "explo_json,mybullet_json,myplane_json,startbutton_png,bg_png,enemybullet_json,power_json,bgmusic_mp3,bullet_mp3,bullet2_mp3,explo_mp3,bgmusic2_mp3,die_mp3,getpower_mp3,warning_mp3,mainbg_jpg,enemyplane_json,end_json,boss_music_mp3",
+			"keys": "explo_json,mybullet_json,myplane_json,startbutton_png,bg_png,enemybullet_json,power_json,bgmusic_mp3,bullet_mp3,bullet2_mp3,explo_mp3,bgmusic2_mp3,die_mp3,getpower_mp3,warning_mp3,mainbg_jpg,enemyplane_json,end_json,boss_music_mp3,bg2_jpg,bg3_jpg,bg4_jpg,bg5_jpg,bg6_jpg,plane_bomb_mp3",
 			"name": "planewar"
 		}
 	],
@@ -107,6 +107,36 @@
 			"url": "assets/boss_music.mp3",
 			"type": "sound",
 			"name": "boss_music_mp3"
+		},
+		{
+			"url": "assets/bg2.jpg",
+			"type": "image",
+			"name": "bg2_jpg"
+		},
+		{
+			"url": "assets/bg3.jpg",
+			"type": "image",
+			"name": "bg3_jpg"
+		},
+		{
+			"url": "assets/bg4.jpg",
+			"type": "image",
+			"name": "bg4_jpg"
+		},
+		{
+			"url": "assets/bg5.jpg",
+			"type": "image",
+			"name": "bg5_jpg"
+		},
+		{
+			"url": "assets/bg6.jpg",
+			"type": "image",
+			"name": "bg6_jpg"
+		},
+		{
+			"url": "assets/plane_bomb.mp3",
+			"type": "sound",
+			"name": "plane_bomb_mp3"
 		}
 	]
 }
