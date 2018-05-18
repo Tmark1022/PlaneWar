@@ -7,6 +7,7 @@ class Bullet extends MovableBitMap{
     private bullet_type:number;                         // 子弹类型
     private vertical_speed:number;                      // 子弹垂直速度（正数往下移动， 负数往上移动）
     private horizontal_speed:number;                    // 子弹水平速度（正数往右移动， 负数往左移动）
+    damage_init:number;                                 // 子弹初始伤害
     damage:number;                                      // 子弹伤害
 
     /**
@@ -67,8 +68,8 @@ class Bullet extends MovableBitMap{
         let damage_temp:number;
         switch(bullet_type_temp){
             case 1: texture_name = "mybullet_json.mybullet_norm"; damage_temp = 20; break;
-            case 2: texture_name = "mybullet_json.mybullet2"; damage_temp = 10; break;
-            case 3: texture_name = "mybullet_json.bullet-self3-" + texture_index.toString(); damage_temp = 8; break;
+            case 2: texture_name = "mybullet_json.mybullet2"; damage_temp = 12; break;
+            case 3: texture_name = "mybullet_json.bullet-self3-" + texture_index.toString(); damage_temp = 4; break;
             case 4: texture_name = "enemybullet_json.enemybullet1"; damage_temp = 20; break;
             case 5: texture_name = "enemybullet_json.enemybullet2"; damage_temp = 20; break;
             case 6: texture_name = "enemybullet_json.enemybullet3"; damage_temp = 20; break;
@@ -78,7 +79,8 @@ class Bullet extends MovableBitMap{
 
         // 初始化成员属性
         this.bullet_type = bullet_type_temp;
-        this.damage = damage_temp;
+        this.damage_init = damage_temp;
+        this.damage = this.damage_init;
     }
 
     /**

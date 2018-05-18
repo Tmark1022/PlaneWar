@@ -56,6 +56,14 @@ var Main = (function (_super) {
             egret.ticker.pause();
         };
         egret.lifecycle.onResume = function () {
+            // 切换后台结束游戏
+            if (GameData.GameAppObj != null) {
+                if (GameData.GameAppObj.is_in_game == true) {
+                    GameData.myPlane.blood = 0;
+                    GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                    GameData.GameAppObj.gameStop();
+                }
+            }
             egret.ticker.resume();
         };
         //设置加载进度界面

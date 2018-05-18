@@ -28,11 +28,11 @@ var Bullet = (function (_super) {
                 break;
             case 2:
                 texture_name = "mybullet_json.mybullet2";
-                damage_temp = 10;
+                damage_temp = 12;
                 break;
             case 3:
                 texture_name = "mybullet_json.bullet-self3-" + texture_index.toString();
-                damage_temp = 8;
+                damage_temp = 4;
                 break;
             case 4:
                 texture_name = "enemybullet_json.enemybullet1";
@@ -54,7 +54,8 @@ var Bullet = (function (_super) {
         _this = _super.call(this, texture_name) || this;
         // 初始化成员属性
         _this.bullet_type = bullet_type_temp;
-        _this.damage = damage_temp;
+        _this.damage_init = damage_temp;
+        _this.damage = _this.damage_init;
         return _this;
     }
     /**

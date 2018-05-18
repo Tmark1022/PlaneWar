@@ -20,6 +20,8 @@ class GameApp extends egret.DisplayObjectContainer{
     start_main_bg:StartMainBg;
     end_main_bg:EndMainBg;
 
+    is_in_game:boolean;                                     // 是否正在游戏中（用于用户将游戏切换后台的是否直接关闭游戏）
+
     /**
      * 构造函数 
      */
@@ -40,6 +42,8 @@ class GameApp extends egret.DisplayObjectContainer{
         this.bg_music1 = RES.getRes("bgmusic_mp3");
         this.bg_music2 = RES.getRes("bgmusic2_mp3");
         this.bg_music_boss = RES.getRes("boss_music_mp3");
+
+        this.is_in_game = false;
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
@@ -94,6 +98,8 @@ class GameApp extends egret.DisplayObjectContainer{
         GameData.fpsLastRecordTime = 0;
         GameData.Score = 0;
 
+        this.is_in_game = true;
+
         // 创建我的战机
         if(GameData.myPlane == null){
             let my_plane:PlaneBase = PlaneFactory.createPlane(1, "myplane_json.myplane");
@@ -146,7 +152,9 @@ class GameApp extends egret.DisplayObjectContainer{
     /**
      * 结束游戏
      */
-    private gameStop():any{
+    public gameStop():any{
+        this.is_in_game = false;
+
         // 我的战机
         GameData.myPlane.removeEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
         this.removeChild(GameData.myPlane);
@@ -264,17 +272,23 @@ class GameApp extends egret.DisplayObjectContainer{
         my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
         my_plane.x = 0;
         my_plane.y = my_plane.height;
+        my_plane.scaleX = 2;
+        my_plane.scaleY = 2;
         this.addChild(my_plane);
         GameData.guardPlaneLeft = <GuardPlane>my_plane;
-        egret.Tween.get(GameData.guardPlaneLeft).to({ x: GameData.myPlane.x - GameData.guardPlaneLeft.space_width, y:GameData.myPlane.y}, 2000, egret.Ease.circIn );
+        egret.Tween.get(GameData.guardPlaneLeft).to({ x: GameData.myPlane.x - GameData.guardPlaneLeft.space_width, y:GameData.myPlane.y}, 400, egret.Ease.circIn );
+        egret.Tween.get(GameData.guardPlaneLeft).to({ scaleX : 0.7, scaleY : 0.7}, 1500, egret.Ease.circIn );
 
         my_plane = PlaneFactory.createPlane(2, "myplane_json.myplane_add");
         my_plane.addEventListener(BulletEvent.CREATE_BULLET, this.createBullet, this);
         my_plane.x = GameData.stageW;
         my_plane.y = my_plane.height;
+        my_plane.scaleX = 2;
+        my_plane.scaleY = 2;
         this.addChild(my_plane);
         GameData.guardPlaneRight = <GuardPlane>my_plane;
-        egret.Tween.get(GameData.guardPlaneRight).to({ x: GameData.myPlane.x + GameData.guardPlaneRight.space_width, y:GameData.myPlane.y}, 2000, egret.Ease.circIn );
+        egret.Tween.get(GameData.guardPlaneRight).to({ x: GameData.myPlane.x + GameData.guardPlaneRight.space_width, y:GameData.myPlane.y}, 400, egret.Ease.circIn );
+        egret.Tween.get(GameData.guardPlaneRight).to({ scaleX : 0.7, scaleY : 0.7}, 1500, egret.Ease.circIn );
     }
 
     /**创建敌机响应函数1 */
@@ -502,8 +516,9 @@ class GameApp extends egret.DisplayObjectContainer{
                     bullet_obj.y = my_plane_obj.y-50*(i-1);
                     bullet_obj.setHorizontalSpeed(0);
                     bullet_obj.setVerticalSpeed(-40);
-                    // this.addChild(bullet_obj);
-                    this.addChildAt(bullet_obj, 1);             // 因为激活显示太厉害了，所以显示在图层的下方
+                    bullet_obj.damage = bullet_obj.damage_init + (my_plane_obj.getBulletLevel() - 1) * 2;               // 激光炮伤害与子弹等级成正比
+
+                    this.addChildAt(bullet_obj, 1);             // 因为激光显示太厉害了，所以显示在图层的下方
                     GameData.myBulletOnStage.push(bullet_obj);
                 }
                 this.bullet2_music.play(0, 1);
@@ -724,7 +739,7 @@ class GameApp extends egret.DisplayObjectContainer{
                     
                     if (HitTest.hitTestP(enemy_plane_obj, my_bullet_obj)){
                         enemy_plane_obj.blood -= my_bullet_obj.damage;
-                        // console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
+                        console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
                         if (enemy_plane_obj.blood <= 0){
                             // 敌机被打爆
                             GameData.Score += enemy_plane_obj.plane_score;
