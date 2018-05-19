@@ -55,7 +55,7 @@ var LoadingUI = (function (_super) {
         this.textField.textAlign = "center";
     };
     LoadingUI.prototype.setProgress = function (current, total) {
-        this.textField.text = "Loading..." + current + "/" + total;
+        this.textField.text = "\u670D\u52A1\u5668\u4E3B\u673A\u5E26\u5BBD\u53EA\u6709\u53EF\u601C\u76841M \n \u8BF7\u8010\u5FC3\u7B49\u5F85\u8D44\u6E90\n \u52A0\u8F7DLoading..." + current + "/" + total;
     };
     return LoadingUI;
 }(egret.Sprite));

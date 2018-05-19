@@ -46,6 +46,6 @@ class LoadingUI extends egret.Sprite {
     }
 
     public setProgress(current:number, total:number):void {
-        this.textField.text = `Loading...${current}/${total}`;
+        this.textField.text = `服务器主机带宽只有可怜的1M \n 请耐心等待资源\n 加载Loading...${current}/${total}`;
     }
 }
