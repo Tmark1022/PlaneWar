@@ -308,7 +308,7 @@ class NormalPlane1 extends PlaneBase{
         // 初始化变量
         this.speed = 4;
         this.blood_init = 20;
-        this.blood_increase = 5;
+        this.blood_increase = 8;
         this.plane_score = 10;
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.fire_delay = 900;
@@ -337,7 +337,7 @@ class NormalPlane2 extends PlaneBase{
         // 初始化变量
         this.speed = 4;
         this.blood_init = 20;
-        this.blood_increase = 5;
+        this.blood_increase = 8;
         this.plane_score = 10;
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.fire_delay = 900;
@@ -370,7 +370,7 @@ class NormalPlane3 extends PlaneBase{
         // 初始化变量
         this.speed = 2;
         this.blood_init = 200;
-        this.blood_increase = 50;
+        this.blood_increase = 60;
         this.plane_score = 100;
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.fire_delay = 800;
@@ -430,7 +430,7 @@ class NormalPlane4 extends PlaneBase{
         // 初始化变量
         this.speed = 0.5;
         this.blood_init = 400;
-        this.blood_increase = 100;
+        this.blood_increase = 130;
         this.plane_score = 100;
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.fire_delay = 1000;
@@ -529,6 +529,18 @@ class BossPlane extends PlaneBase{
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.move_right = true;
         this.move_down = true;
+
+        // 随着关卡ID的增加， 减少Boss开火CD和提升Boss位移速度
+        let fire_delay_time:number = this.fire_delay - (GameData.MissionId - 1) * 10;
+        if (fire_delay_time < 300)
+            fire_delay_time = 300;
+        this.fire_timer.delay = fire_delay_time;
+
+        let speed_temp:number = 1 + (GameData.MissionId - 1) * 0.1;
+        if (speed_temp > 2)
+            speed_temp = 2;
+        this.speed = speed_temp;
+
         this.startFire();
     }
 }

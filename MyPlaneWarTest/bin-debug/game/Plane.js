@@ -269,7 +269,7 @@ var NormalPlane1 = (function (_super) {
         // 初始化变量
         _this.speed = 4;
         _this.blood_init = 20;
-        _this.blood_increase = 5;
+        _this.blood_increase = 8;
         _this.plane_score = 10;
         _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 900;
@@ -300,7 +300,7 @@ var NormalPlane2 = (function (_super) {
         // 初始化变量
         _this.speed = 4;
         _this.blood_init = 20;
-        _this.blood_increase = 5;
+        _this.blood_increase = 8;
         _this.plane_score = 10;
         _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 900;
@@ -333,7 +333,7 @@ var NormalPlane3 = (function (_super) {
         // 初始化变量
         _this.speed = 2;
         _this.blood_init = 200;
-        _this.blood_increase = 50;
+        _this.blood_increase = 60;
         _this.plane_score = 100;
         _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 800;
@@ -387,7 +387,7 @@ var NormalPlane4 = (function (_super) {
         // 初始化变量
         _this.speed = 0.5;
         _this.blood_init = 400;
-        _this.blood_increase = 100;
+        _this.blood_increase = 130;
         _this.plane_score = 100;
         _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 1000;
@@ -476,6 +476,15 @@ var BossPlane = (function (_super) {
         this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.move_right = true;
         this.move_down = true;
+        // 随着关卡ID的增加， 减少Boss开火CD和提升Boss位移速度
+        var fire_delay_time = this.fire_delay - (GameData.MissionId - 1) * 10;
+        if (fire_delay_time < 300)
+            fire_delay_time = 300;
+        this.fire_timer.delay = fire_delay_time;
+        var speed_temp = 1 + (GameData.MissionId - 1) * 0.1;
+        if (speed_temp > 2)
+            speed_temp = 2;
+        this.speed = speed_temp;
         this.startFire();
     };
     BossPlane.planeClassType = 7; // 飞机类型校验

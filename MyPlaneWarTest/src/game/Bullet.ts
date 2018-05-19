@@ -68,7 +68,7 @@ class Bullet extends MovableBitMap{
         let damage_temp:number;
         switch(bullet_type_temp){
             case 1: texture_name = "mybullet_json.mybullet_norm"; damage_temp = 20; break;
-            case 2: texture_name = "mybullet_json.mybullet2"; damage_temp = 12; break;
+            case 2: texture_name = "mybullet_json.mybullet2"; damage_temp = 14; break;
             case 3: texture_name = "mybullet_json.bullet-self3-" + texture_index.toString(); damage_temp = 4; break;
             case 4: texture_name = "enemybullet_json.enemybullet1"; damage_temp = 20; break;
             case 5: texture_name = "enemybullet_json.enemybullet2"; damage_temp = 20; break;

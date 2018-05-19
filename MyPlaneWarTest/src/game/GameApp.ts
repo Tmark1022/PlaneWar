@@ -6,11 +6,13 @@ class GameApp extends egret.DisplayObjectContainer{
     enemy_plane_timer1:egret.Timer;
     enemy_plane_timer2:egret.Timer;
     enemy_plane_timer3:egret.Timer;
-    boss_plane_timer:egret.Timer;
+    boss_coming_timer:egret.Timer;
+    create_boss_timer:egret.Timer;
     aerolite_timer:egret.Timer;
 
     bullet_music:egret.Sound;
     bullet2_music:egret.Sound;
+    warning_sound:egret.Sound;
     get_power_music:egret.Sound;
     bg_music1:egret.Sound;
     bg_music2:egret.Sound;
@@ -33,11 +35,13 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1 = new egret.Timer(1000);                    // 创建敌方飞机计时器1
         this.enemy_plane_timer2 = new egret.Timer(10000);                   // 创建敌方飞机计时器2
         this.enemy_plane_timer3 = new egret.Timer(16000);                   // 创建敌方飞机计时器3
-        this.boss_plane_timer = new egret.Timer(120000);                    // Boss计时器
+        this.boss_coming_timer = new egret.Timer(98000);                    // Boss来了计时器
+        this.create_boss_timer = new egret.Timer(3000, 1);                  // 创建Boss计时器
         this.aerolite_timer = new egret.Timer(15000);                       // 陨石计时器
 
         this.bullet_music = RES.getRes("bullet_mp3");
         this.bullet2_music = RES.getRes("bullet2_mp3");
+        this.warning_sound = RES.getRes("warning_mp3");
         this.get_power_music = RES.getRes("getpower_mp3");
         this.bg_music1 = RES.getRes("bgmusic_mp3");
         this.bg_music2 = RES.getRes("bgmusic2_mp3");
@@ -118,11 +122,14 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane1, this);
         this.enemy_plane_timer2.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane2, this);
         this.enemy_plane_timer3.addEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane3, this);
-        this.boss_plane_timer.addEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
+        this.boss_coming_timer.addEventListener(egret.TimerEvent.TIMER, this.bosComingFunc, this);
+        this.create_boss_timer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, this.createBossPlane, this);
+
         this.aerolite_timer.addEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
         this.addEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
 
         this.scroll_bg.refreshBgTextute();          // 刷新背景纹理
+        this.scroll_bg.setScrollSpeed(2);           // 设置正常的背景滚动
         this.scroll_bg.startScroll();               // 开始滚动背景
         this.startTimeCount();                      // 开始计时器计时
 
@@ -138,7 +145,7 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1.start();            // 敌机计时器1开始
         this.enemy_plane_timer2.start();            // 敌机计时器2开始
         this.enemy_plane_timer3.start();            // 敌机计时器3开始
-        this.boss_plane_timer.start();              // Boss计时器
+        this.boss_coming_timer.start();              // Boss计时器
         this.aerolite_timer.start();                // 陨石计时器
     }
 
@@ -147,7 +154,7 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1.stop();            // 敌机计时器1开始
         this.enemy_plane_timer2.stop();            // 敌机计时器2开始
         this.enemy_plane_timer3.stop();            // 敌机计时器3开始
-        this.boss_plane_timer.stop();              // Boss计时器
+        this.boss_coming_timer.stop();              // Boss计时器
         this.aerolite_timer.stop();                // 陨石计时器
     }
 
@@ -217,7 +224,8 @@ class GameApp extends egret.DisplayObjectContainer{
         this.enemy_plane_timer1.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane1, this);
         this.enemy_plane_timer2.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane2, this);
         this.enemy_plane_timer3.removeEventListener(egret.TimerEvent.TIMER, this.createEnemyPlane3, this);
-        this.boss_plane_timer.removeEventListener(egret.TimerEvent.TIMER, this.createBossPlane, this);
+        this.boss_coming_timer.removeEventListener(egret.TimerEvent.TIMER, this.bosComingFunc, this);
+        this.create_boss_timer.removeEventListener(egret.TimerEvent.TIMER_COMPLETE, this.createBossPlane, this);
         this.aerolite_timer.removeEventListener(egret.TimerEvent.TIMER, this.createAerolite, this);
         this.removeEventListener(egret.Event.ENTER_FRAME, this.updateGameView, this);
 
@@ -362,16 +370,28 @@ class GameApp extends egret.DisplayObjectContainer{
         GameData.enemyPlaneOnStage.push(enemy_plane);
     }
 
+    /**Boss来啦 */
+    private bosComingFunc(evt:egret.TimerEvent):void{
+        // Boss放Boss来了警告音乐
+        this.warning_sound.play(0, 2);
+
+        // 停止其他战机或物品的计时
+        this.stopTimeCount();
+
+        // 开始创建Boss计时
+        this.create_boss_timer.reset();
+        this.create_boss_timer.start();
+
+    }
+
+
     /**创建Boss战机响应函数 */
     private createBossPlane(evt:egret.TimerEvent):void{
+        this.create_boss_timer.stop();
+
         let plane_type:number = 7;
         let texture_name:string = "enemyplane_json.BOSS"
         
-        
-        let warning_sound:egret.Sound = RES.getRes("warning_mp3");
-        warning_sound.play(0, 1);
-
-
         // 创建敌机
         let enemy_plane:PlaneBase = PlaneFactory.createPlane(plane_type, texture_name);
         if (enemy_plane == null){
@@ -388,13 +408,13 @@ class GameApp extends egret.DisplayObjectContainer{
         this.addChild(enemy_plane);
         GameData.enemyPlaneOnStage.push(enemy_plane);
 
-        // 停止其他战机或物品的计时
-        this.stopTimeCount();
-
         // 更换music
-        this.bg_music_channel.stop();
+        if (this.bg_music_channel != null)
+        {
+            this.bg_music_channel.stop();
+        }
         this.bg_music_channel = this.bg_music_boss.play(0, -1);
-        this.bg_music_channel.volume = 0.4;
+        this.bg_music_channel.volume = 0.3;
     }
 
     /**创建陨石 */
@@ -746,7 +766,7 @@ class GameApp extends egret.DisplayObjectContainer{
                     
                     if (HitTest.hitTestP(enemy_plane_obj, my_bullet_obj)){
                         enemy_plane_obj.blood -= my_bullet_obj.damage;
-                        console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
+                        // console.log(`hit enemy_plane, ${my_bullet_obj.damage}, ${enemy_plane_obj.blood}, ${enemy_plane_obj.plane_score}`);
                         if (enemy_plane_obj.blood <= 0){
                             // 敌机被打爆
                             GameData.Score += enemy_plane_obj.plane_score;
