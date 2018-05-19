@@ -11,6 +11,7 @@ class GameData{
     static InfoPanelObj:InfoPanel;                      // 信息面板对象
 
     static Score:number;                                // 得分
+    static MissionId:number;                            // 关卡(难度)
 
     static planeCacheDict:Object = {};                  // 后台飞机缓存
     static bulletCacheDict:Object = {};                 // 后台子弹缓存

@@ -140,6 +140,8 @@ class Power extends MovableBitMap{
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            let score_effect_obj:ScoreEffect = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else{
@@ -157,6 +159,8 @@ class Power extends MovableBitMap{
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            let score_effect_obj:ScoreEffect = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else{
@@ -174,6 +178,8 @@ class Power extends MovableBitMap{
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            let score_effect_obj:ScoreEffect = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else{
@@ -190,6 +196,8 @@ class Power extends MovableBitMap{
                         // 已经创建就加分
                         GameData.Score += 100;
                         GameData.InfoPanelObj.updateScore();
+                        let score_effect_obj:ScoreEffect = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                     }
                 } break;
             case 5:{
@@ -198,6 +206,8 @@ class Power extends MovableBitMap{
                         // 满血， 加分
                         GameData.Score += 100;
                         GameData.InfoPanelObj.updateScore();
+                        let score_effect_obj:ScoreEffect = new ScoreEffect(this, 100);
+                        GameData.GameAppObj.addChild(score_effect_obj);
                     }
                     else{
                         let temp_blood:number = myplane.blood + 50;

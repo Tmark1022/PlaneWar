@@ -62,7 +62,7 @@ class InfoPanel extends egret.Sprite{
 
     public updateScore():void{
         let now_score:number = GameData.Score;
-        this.score_text_field.text = `得分:${now_score}`;
+        this.score_text_field.text = `关卡${GameData.MissionId} 得分:${now_score}`;
     }
 
     public updateBlood(new_blood:number):void{

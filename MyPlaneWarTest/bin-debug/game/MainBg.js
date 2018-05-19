@@ -34,7 +34,7 @@ var StartMainBg = (function (_super) {
         this.start_button.anchorOffsetX = this.start_button.width / 2;
         this.start_button.anchorOffsetY = this.start_button.height / 2;
         this.start_button.x = GameData.stageW / 2;
-        this.start_button.y = GameData.stageH / 2;
+        this.start_button.y = GameData.stageH / 6 * 5;
         this.addChild(this.start_button);
     };
     return StartMainBg;
@@ -56,13 +56,26 @@ var EndMainBg = (function (_super) {
         this.bg_shape.graphics.endFill();
         this.bg_shape.alpha = 0.5;
         this.addChild(this.bg_shape);
+        this.game_over_bitmap = new egret.Bitmap();
+        this.game_over_bitmap.texture = RES.getRes("gameover_png");
+        var readix_temp = this.game_over_bitmap.texture.textureHeight / this.game_over_bitmap.texture.textureWidth;
+        this.game_over_bitmap.width = GameData.stageW;
+        this.game_over_bitmap.height = this.game_over_bitmap.width * readix_temp;
+        this.game_over_bitmap.anchorOffsetX = this.game_over_bitmap.width / 2;
+        this.game_over_bitmap.anchorOffsetY = this.game_over_bitmap.height / 2;
+        this.game_over_bitmap.x = GameData.stageW / 2;
+        this.game_over_bitmap.y = GameData.stageH / 5 * 2;
+        this.addChild(this.game_over_bitmap);
         this.text_field = new egret.TextField();
-        this.text_field.x = GameData.stageW / 5 * 2;
-        this.text_field.y = GameData.stageH / 2;
+        this.text_field.width = GameData.stageW;
+        this.text_field.x = 0;
+        this.text_field.y = GameData.stageH / 6 * 4;
+        this.text_field.textAlign = "center";
+        this.text_field.size = 40;
         this.addChild(this.text_field);
     };
     EndMainBg.prototype.updateScore = function () {
-        this.text_field.text = "\u5F97\u5206:" + GameData.Score;
+        this.text_field.text = "\u5230\u8FBE\u5173\u5361:" + GameData.MissionId + "\n\n\n\u603B\u5F97\u5206:" + GameData.Score;
     };
     return EndMainBg;
 }(egret.Sprite));

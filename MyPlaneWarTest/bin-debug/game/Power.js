@@ -134,6 +134,8 @@ var Power = (function (_super) {
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            var score_effect_obj = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else {
@@ -153,6 +155,8 @@ var Power = (function (_super) {
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            var score_effect_obj = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else {
@@ -172,6 +176,8 @@ var Power = (function (_super) {
                             // 已经满级就加分
                             GameData.Score += 100;
                             GameData.InfoPanelObj.updateScore();
+                            var score_effect_obj = new ScoreEffect(this, 100);
+                            GameData.GameAppObj.addChild(score_effect_obj);
                         }
                     }
                     else {
@@ -190,6 +196,8 @@ var Power = (function (_super) {
                         // 已经创建就加分
                         GameData.Score += 100;
                         GameData.InfoPanelObj.updateScore();
+                        var score_effect_obj = new ScoreEffect(this, 100);
+                        GameData.GameAppObj.addChild(score_effect_obj);
                     }
                 }
                 break;
@@ -200,6 +208,8 @@ var Power = (function (_super) {
                         // 满血， 加分
                         GameData.Score += 100;
                         GameData.InfoPanelObj.updateScore();
+                        var score_effect_obj = new ScoreEffect(this, 100);
+                        GameData.GameAppObj.addChild(score_effect_obj);
                     }
                     else {
                         var temp_blood = myplane.blood + 50;

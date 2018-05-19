@@ -54,7 +54,7 @@ var InfoPanel = (function (_super) {
     }
     InfoPanel.prototype.updateScore = function () {
         var now_score = GameData.Score;
-        this.score_text_field.text = "\u5F97\u5206:" + now_score;
+        this.score_text_field.text = "\u5173\u5361" + GameData.MissionId + " \u5F97\u5206:" + now_score;
     };
     InfoPanel.prototype.updateBlood = function (new_blood) {
         if (new_blood < this.min_blood)

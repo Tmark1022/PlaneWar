@@ -23,8 +23,9 @@ var PlaneBase = (function (_super) {
         _this.plane_type = plane_type; // 设置飞机类型
         // 初始化成员属性
         _this.speed = 1;
-        _this.blood = 0;
         _this.blood_init = 0;
+        _this.blood_increase = 0;
+        _this.blood = 0;
         _this.plane_score = 0;
         _this.fire_delay = 0;
         _this.fire_timer = null;
@@ -37,7 +38,7 @@ var PlaneBase = (function (_super) {
     // 加入舞台后自动开火
     PlaneBase.prototype.onAddToStage = function (evt) {
         // 初始化血量
-        this.blood = this.blood_init;
+        this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.startFire();
     };
     // 离开舞台后制动停火
@@ -110,8 +111,9 @@ var MyPlane = (function (_super) {
         // 初始化变量
         // this.speed = 1;  不需要speed因为我的战机是我自己控制的。
         _this.blood_init = 100;
+        _this.blood_increase = 0;
         _this.plane_score = 0;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 300;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 1;
@@ -127,7 +129,7 @@ var MyPlane = (function (_super) {
         this.touchEnabled = true;
         this.bullet_level = 1; // 子弹等级
         this.bullet_type = 1; // 初始化子弹类型
-        this.blood = this.blood_init; // 初始化血量
+        this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase; // 初始化血量
         this.startFire();
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.startTouchMove, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.stopTouchMove, this);
@@ -239,8 +241,9 @@ var GuardPlane = (function (_super) {
         }
         // 初始化变量
         _this.blood_init = 0;
+        _this.blood_increase = 0;
         _this.plane_score = 0;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 500;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 1;
@@ -266,8 +269,9 @@ var NormalPlane1 = (function (_super) {
         // 初始化变量
         _this.speed = 4;
         _this.blood_init = 20;
+        _this.blood_increase = 5;
         _this.plane_score = 10;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 900;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 4; // 修改子弹类型
@@ -296,8 +300,9 @@ var NormalPlane2 = (function (_super) {
         // 初始化变量
         _this.speed = 4;
         _this.blood_init = 20;
+        _this.blood_increase = 5;
         _this.plane_score = 10;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 900;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 5; // 修改子弹类型
@@ -327,9 +332,10 @@ var NormalPlane3 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 2;
-        _this.blood_init = 250;
+        _this.blood_init = 200;
+        _this.blood_increase = 50;
         _this.plane_score = 100;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 800;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 6; // 修改子弹类型
@@ -361,7 +367,7 @@ var NormalPlane3 = (function (_super) {
     // 加入舞台后自动开火
     NormalPlane3.prototype.onAddToStage = function (evt) {
         // 初始化血量
-        this.blood = this.blood_init;
+        this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.move_right = true;
         this.move_down = true;
         this.startFire();
@@ -380,9 +386,10 @@ var NormalPlane4 = (function (_super) {
         }
         // 初始化变量
         _this.speed = 0.5;
-        _this.blood_init = 500;
+        _this.blood_init = 400;
+        _this.blood_increase = 100;
         _this.plane_score = 100;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 1000;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 7; // 修改子弹类型
@@ -432,8 +439,9 @@ var BossPlane = (function (_super) {
         // 初始化变量
         _this.speed = 1;
         _this.blood_init = 5000;
+        _this.blood_increase = 1000;
         _this.plane_score = 1000;
-        _this.blood = _this.blood_init;
+        _this.blood = _this.blood_init + (GameData.MissionId - 1) * _this.blood_increase;
         _this.fire_delay = 400;
         _this.fire_timer = new egret.Timer(_this.fire_delay);
         _this.bullet_type = 7; // 修改子弹类型
@@ -465,7 +473,7 @@ var BossPlane = (function (_super) {
     // 加入舞台后自动开火
     BossPlane.prototype.onAddToStage = function (evt) {
         // 初始化血量
-        this.blood = this.blood_init;
+        this.blood = this.blood_init + (GameData.MissionId - 1) * this.blood_increase;
         this.move_right = true;
         this.move_down = true;
         this.startFire();

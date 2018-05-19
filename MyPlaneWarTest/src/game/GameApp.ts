@@ -32,9 +32,9 @@ class GameApp extends egret.DisplayObjectContainer{
         this.scroll_bg = null;
         this.enemy_plane_timer1 = new egret.Timer(1000);                    // 创建敌方飞机计时器1
         this.enemy_plane_timer2 = new egret.Timer(10000);                   // 创建敌方飞机计时器2
-        this.enemy_plane_timer3 = new egret.Timer(15000);                   // 创建敌方飞机计时器3
-        this.boss_plane_timer = new egret.Timer(180000);                    // Boss计时器
-        this.aerolite_timer = new egret.Timer(10000);                       // 陨石计时器
+        this.enemy_plane_timer3 = new egret.Timer(16000);                   // 创建敌方飞机计时器3
+        this.boss_plane_timer = new egret.Timer(120000);                    // Boss计时器
+        this.aerolite_timer = new egret.Timer(15000);                       // 陨石计时器
 
         this.bullet_music = RES.getRes("bullet_mp3");
         this.bullet2_music = RES.getRes("bullet2_mp3");
@@ -78,7 +78,7 @@ class GameApp extends egret.DisplayObjectContainer{
         if (this.bg_music_channel != null)
             this.bg_music_channel.stop();
         this.bg_music_channel = this.bg_music2.play(0,-1);
-        this.bg_music_channel.volume = 0.4;
+        this.bg_music_channel.volume = 1;
     }
 
     /**点击开始按钮 */
@@ -97,6 +97,7 @@ class GameApp extends egret.DisplayObjectContainer{
         GameData.fpsOffset = 1;
         GameData.fpsLastRecordTime = 0;
         GameData.Score = 0;
+        GameData.MissionId = 1;
 
         this.is_in_game = true;
 
@@ -255,9 +256,8 @@ class GameApp extends egret.DisplayObjectContainer{
         if (this.bg_music_channel != null)
             this.bg_music_channel.stop();
         this.bg_music_channel = this.bg_music2.play(0,-1);
-        this.bg_music_channel.volume = 0.4;
+        this.bg_music_channel.volume = 1;
     }
-
 
     /**
      * 重新游戏
@@ -690,6 +690,9 @@ class GameApp extends egret.DisplayObjectContainer{
                     if (HitTest.hitTestP(enemy_plane_obj, GameData.myPlane)){
                         GameData.myPlane.blood -= 100;                  // 直接死亡
                         GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                        let hurt_sound:egret.Sound = RES.getRes("plane_bomb_mp3");
+                        let channel:egret.SoundChannel = hurt_sound.play(0 ,1);
+                        channel.volume = 0.8;
                         break;                                          // 避免同时受到两发以上伤害
                     }
                 }
@@ -704,6 +707,9 @@ class GameApp extends egret.DisplayObjectContainer{
                     if (HitTest.hitTestP(aerolite_obj, GameData.myPlane)){
                         GameData.myPlane.blood -= 100;                  // 直接死亡
                         GameData.InfoPanelObj.updateBlood(GameData.myPlane.blood);
+                        let hurt_sound:egret.Sound = RES.getRes("plane_bomb_mp3");
+                        let channel:egret.SoundChannel = hurt_sound.play(0 ,1);
+                        channel.volume = 0.8;
                         break;                                          // 避免同时受到两发以上伤害
                     }
                 }
@@ -750,7 +756,9 @@ class GameApp extends egret.DisplayObjectContainer{
 
                             // Boss被打败
                             if (enemy_plane_obj.plane_type == 7){
-                                // 停止其他战机或物品的计时
+                                // 开始其他战机或物品的计时
+                                GameData.MissionId += 1;
+                                GameData.InfoPanelObj.updateScore();
                                 this.startTimeCount();
 
                                 // 更换music

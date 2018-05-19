@@ -23,6 +23,7 @@
 		"bin-debug/LoadingUI.js",
 		"bin-debug/game/Plane.js",
 		"bin-debug/game/PlanrFactory.js",
-		"bin-debug/game/Power.js"
+		"bin-debug/game/Power.js",
+		"bin-debug/game/ScoreEffect.js"
 	]
 }
