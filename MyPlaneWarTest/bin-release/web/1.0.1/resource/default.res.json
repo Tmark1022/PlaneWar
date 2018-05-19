@@ -1,0 +1,147 @@
+{
+	"groups": [
+		{
+			"keys": "explo_json,mybullet_json,myplane_json,startbutton_png,bg_png,enemybullet_json,power_json,bgmusic_mp3,bullet_mp3,bullet2_mp3,explo_mp3,bgmusic2_mp3,die_mp3,getpower_mp3,warning_mp3,mainbg_jpg,enemyplane_json,end_json,boss_music_mp3,bg2_jpg,bg3_jpg,bg4_jpg,bg5_jpg,bg6_jpg,plane_bomb_mp3,gameover_png",
+			"name": "planewar"
+		}
+	],
+	"resources": [
+		{
+			"url": "assets/explo.json",
+			"type": "sheet",
+			"name": "explo_json",
+			"subkeys": "explo_m1,explo_m10,explo_m11,explo_m12,explo_m13,explo_m14,explo_m15,explo_m16,explo_m17,explo_m18,explo_m19,explo_m2,explo_m20,explo_m21,explo_m22,explo_m23,explo_m24,explo_m25,explo_m26,explo_m3,explo_m4,explo_m5,explo_m6,explo_m7,explo_m8,explo_m9"
+		},
+		{
+			"url": "assets/mybullet.json",
+			"type": "sheet",
+			"name": "mybullet_json",
+			"subkeys": "bullet-self3-1,bullet-self3-10,bullet-self3-11,bullet-self3-12,bullet-self3-13,bullet-self3-14,bullet-self3-2,bullet-self3-3,bullet-self3-4,bullet-self3-5,bullet-self3-6,bullet-self3-7,bullet-self3-8,bullet-self3-9,mybullet2,mybullet_norm"
+		},
+		{
+			"url": "assets/myplane.json",
+			"type": "sheet",
+			"name": "myplane_json",
+			"subkeys": "myplane,myplane_add,myplane_baohu"
+		},
+		{
+			"url": "assets/startbutton.png",
+			"type": "image",
+			"name": "startbutton_png"
+		},
+		{
+			"url": "assets/bg.png",
+			"type": "image",
+			"name": "bg_png"
+		},
+		{
+			"url": "assets/enemybullet.json",
+			"type": "sheet",
+			"name": "enemybullet_json",
+			"subkeys": "enemybullet1,enemybullet2,enemybullet3,enemybullet4"
+		},
+		{
+			"url": "assets/power.json",
+			"type": "sheet",
+			"name": "power_json",
+			"subkeys": "bulletplane1,bulletplane2,bulletplane3,bulletplane4,power-b1,power-b2,power-b3,power-b4,power-bbomb,power-blife,power-bullet1-1,power-bullet1-2,power-bullet1-3,power-bullet1-4,power-bullet2-1,power-bullet2-2,power-bullet2-3,power-bullet2-4,power-bullet3-1,power-bullet3-2,power-bullet3-3,power-bullet3-4,power-mis1,power-mis2,power-mis3,power-mis4,power-misf,power-mism,store"
+		},
+		{
+			"url": "assets/bgmusic.mp3",
+			"type": "sound",
+			"name": "bgmusic_mp3"
+		},
+		{
+			"url": "assets/bullet.mp3",
+			"type": "sound",
+			"name": "bullet_mp3"
+		},
+		{
+			"url": "assets/bullet2.mp3",
+			"type": "sound",
+			"name": "bullet2_mp3"
+		},
+		{
+			"url": "assets/explo.mp3",
+			"type": "sound",
+			"name": "explo_mp3"
+		},
+		{
+			"url": "assets/bgmusic2.mp3",
+			"type": "sound",
+			"name": "bgmusic2_mp3"
+		},
+		{
+			"url": "assets/die.mp3",
+			"type": "sound",
+			"name": "die_mp3"
+		},
+		{
+			"url": "assets/getpower.mp3",
+			"type": "sound",
+			"name": "getpower_mp3"
+		},
+		{
+			"url": "assets/warning.mp3",
+			"type": "sound",
+			"name": "warning_mp3"
+		},
+		{
+			"url": "assets/mainbg.jpg",
+			"type": "image",
+			"name": "mainbg_jpg"
+		},
+		{
+			"url": "assets/enemyplane.json",
+			"type": "sheet",
+			"name": "enemyplane_json",
+			"subkeys": "BOSS,enemyplane1,enemyplane2,enemyplane3,enemyplane4"
+		},
+		{
+			"url": "assets/end.json",
+			"type": "sheet",
+			"name": "end_json",
+			"subkeys": "fail,win"
+		},
+		{
+			"url": "assets/boss_music.mp3",
+			"type": "sound",
+			"name": "boss_music_mp3"
+		},
+		{
+			"url": "assets/bg2.jpg",
+			"type": "image",
+			"name": "bg2_jpg"
+		},
+		{
+			"url": "assets/bg3.jpg",
+			"type": "image",
+			"name": "bg3_jpg"
+		},
+		{
+			"url": "assets/bg4.jpg",
+			"type": "image",
+			"name": "bg4_jpg"
+		},
+		{
+			"url": "assets/bg5.jpg",
+			"type": "image",
+			"name": "bg5_jpg"
+		},
+		{
+			"url": "assets/bg6.jpg",
+			"type": "image",
+			"name": "bg6_jpg"
+		},
+		{
+			"url": "assets/plane_bomb.mp3",
+			"type": "sound",
+			"name": "plane_bomb_mp3"
+		},
+		{
+			"url": "assets/gameover.png",
+			"type": "image",
+			"name": "gameover_png"
+		}
+	]
+}

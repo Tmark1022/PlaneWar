@@ -1,0 +1,5 @@
+{"file":"enemybullet.png","frames":{
+"enemybullet4":{"x":50,"y":1,"w":36,"h":85,"offX":7,"offY":5,"sourceW":48,"sourceH":90},
+"enemybullet1":{"x":88,"y":57,"w":16,"h":56,"offX":0,"offY":9,"sourceW":16,"sourceH":66},
+"enemybullet2":{"x":1,"y":1,"w":47,"h":89,"offX":1,"offY":1,"sourceW":48,"sourceH":90},
+"enemybullet3":{"x":88,"y":1,"w":35,"h":54,"offX":6,"offY":2,"sourceW":47,"sourceH":59}}}

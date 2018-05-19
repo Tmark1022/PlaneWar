@@ -1,0 +1,4 @@
+{"file":"myplane.png","frames":{
+"myplane":{"x":1,"y":1,"w":72,"h":67,"offX":22,"offY":20,"sourceW":117,"sourceH":108},
+"myplane_add":{"x":75,"y":1,"w":37,"h":50,"offX":52,"offY":32,"sourceW":141,"sourceH":112},
+"myplane_baohu":{"x":75,"y":53,"w":27,"h":28,"offX":1,"offY":1,"sourceW":29,"sourceH":29}}}
